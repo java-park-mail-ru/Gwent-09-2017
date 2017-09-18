@@ -32,4 +32,23 @@ public class UserProfile {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        final UserProfile userProfile = (UserProfile) obj;
+
+        return login.equals(userProfile.login);
+    }
+
+    @Override
+    public int hashCode() {
+        return login.hashCode();
+    }
 }

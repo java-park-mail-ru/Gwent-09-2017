@@ -11,6 +11,11 @@ import ru.mail.park.gwent.account.UserProfile;
 
 @RestController
 public class UserController {
+    private static final Message SIGNED_UP_MSG = new Message("User signed up");
+    private static final Message NO_LOGIN_OR_PASSWORD_MSG = new Message("No login or password");
+    private static final Message EMPTY_LOGIN_OR_PASSWORD_MSG = new Message("Empty login or password");
+    private static final Message LOGIN_IS_ALREADY_TAKEN_MSG = new Message("Login is already taken");
+
     private final AccountService accountService;
 
     public UserController(AccountService accountService) {
@@ -20,24 +25,20 @@ public class UserController {
     @PostMapping("/api/join")
     public ResponseEntity signUp(@RequestBody(required = false) UserProfile profile) {
         if (profile == null || profile.getLogin() == null || profile.getPassword() == null) {
-            final Message noLoginOrPasswordMsg = new Message("No login or password");
-            return ResponseEntity.badRequest().body(noLoginOrPasswordMsg);
+            return ResponseEntity.badRequest().body(NO_LOGIN_OR_PASSWORD_MSG);
         }
 
         if (profile.getLogin().isEmpty() || profile.getPassword().isEmpty()) {
-            final Message emptyLoginOrPasswordMsg = new Message("Empty login or password");
-            return ResponseEntity.badRequest().body(emptyLoginOrPasswordMsg);
+            return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD_MSG);
         }
 
         final UserProfile findedUserByLogin = accountService.getUserByLogin(profile.getLogin());
 
         if (findedUserByLogin != null) {
-            final Message loginIsAlreadyTakenMsg = new Message("Login is already taken");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(loginIsAlreadyTakenMsg);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(LOGIN_IS_ALREADY_TAKEN_MSG);
         }
 
         accountService.addUser(profile);
-        final Message signedUpMsg = new Message("User signed up");
-        return ResponseEntity.ok().body(signedUpMsg);
+        return ResponseEntity.ok().body(SIGNED_UP_MSG);
     }
 }
