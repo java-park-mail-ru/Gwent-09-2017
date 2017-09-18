@@ -3,6 +3,7 @@ package ru.mail.park.gwent.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.mail.park.gwent.Message;
 import ru.mail.park.gwent.account.AccountService;
 import ru.mail.park.gwent.account.UserProfile;
 
@@ -16,44 +17,61 @@ public class SessionController {
         this.accountService = accountService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<UserProfile> getLoggedUserProfile(HttpSession session) {
+    @GetMapping("/api/auth")
+    public ResponseEntity getLoggedUserProfile(HttpSession session) {
         final String sessionId = session.getId();
-        final UserProfile profile = accountService.getUserBySessionId(sessionId);
-        if (profile == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        final UserProfile findedUserBySessionId = accountService.getUserBySessionId(sessionId);
+        if (findedUserBySessionId == null) {
+            final Message notAuthorizedMsg = new Message("User not authorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(notAuthorizedMsg);
         } else {
-            return ResponseEntity.ok(profile);
+            return ResponseEntity.ok(findedUserBySessionId);
         }
     }
 
-    @PostMapping("/")
-    public HttpStatus signIn(@RequestBody UserProfile profile, HttpSession session) {
-        final String login = profile.getLogin();
-        final String password = profile.getPassword();
-
-        if (login == null && password == null) {
-            return HttpStatus.BAD_REQUEST;
+    @PostMapping("/api/auth")
+    public ResponseEntity signIn(@RequestBody(required = false) UserProfile profile, HttpSession session) {
+        if (profile == null || profile.getLogin() == null || profile.getPassword() == null) {
+            final Message noLoginOrPasswordMsg = new Message("No login or password");
+            return ResponseEntity.badRequest().body(noLoginOrPasswordMsg);
         }
 
-        final UserProfile user = accountService.getUserByLogin(login);
-        if(user == null || !user.getPassword().equals(password)) {
-            return HttpStatus.UNAUTHORIZED;
+        if (profile.getLogin().isEmpty() || profile.getPassword().isEmpty()) {
+            final Message emptyLoginOrPasswordMsg = new Message("Empty login or password");
+            return ResponseEntity.badRequest().body(emptyLoginOrPasswordMsg);
         }
 
-        accountService.addSession(session.getId(), user);
-        return HttpStatus.OK;
+        final UserProfile findedUserByLogin = accountService.getUserByLogin(profile.getLogin());
+
+        if (findedUserByLogin == null || !findedUserByLogin.getPassword().equals(profile.getPassword())) {
+            final Message wrongLoginOrPasswordMsg = new Message("Wrong login or password");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(wrongLoginOrPasswordMsg);
+        }
+
+        final String sessionId = session.getId();
+        final UserProfile findedUserBySessionId = accountService.getUserBySessionId(sessionId);
+        if (findedUserBySessionId != null) {
+            final Message alreadyAuthorizedMsg = new Message("User is already authorized");
+            return ResponseEntity.ok().body(alreadyAuthorizedMsg);
+        }
+
+        accountService.addSession(sessionId, findedUserByLogin);
+        final Message authorizedMsg = new Message("User authorized");
+        return ResponseEntity.ok().body(authorizedMsg);
     }
 
-    @DeleteMapping("/")
-    public HttpStatus signOut(HttpSession session) {
+    @DeleteMapping("/api/auth")
+    public ResponseEntity signOut(HttpSession session) {
         final String sessionId = session.getId();
-        final UserProfile profile = accountService.getUserBySessionId(sessionId);
-        if (profile == null) {
-            return HttpStatus.UNAUTHORIZED;
-        } else {
-            accountService.deleteSession(sessionId);
-            return HttpStatus.OK;
+        final UserProfile findedUserBySessionId = accountService.getUserBySessionId(sessionId);
+
+        if (findedUserBySessionId == null) {
+            final Message notAuthorizedMsg = new Message("User not authorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(notAuthorizedMsg);
         }
+
+        accountService.deleteSession(sessionId);
+        final Message loggedOutMsg = new Message("User logged out");
+        return ResponseEntity.ok().body(loggedOutMsg);
     }
 }

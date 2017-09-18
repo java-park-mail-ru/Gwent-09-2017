@@ -1,10 +1,11 @@
 package ru.mail.park.gwent.controllers;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import ru.mail.park.gwent.Message;
 import ru.mail.park.gwent.account.AccountService;
 import ru.mail.park.gwent.account.UserProfile;
 
@@ -16,28 +17,27 @@ public class UserController {
         this.accountService = accountService;
     }
 
-    @GetMapping("/user")
-    public UserProfile getUserProfile() {
-        return new UserProfile("test","password", "test@my.com");
-    }
-
-    @PostMapping("/user")
-    public HttpStatus signUp(@RequestBody UserProfile profile) {
-        final String login = profile.getLogin();
-        final String password = profile.getPassword();
-        final String email = profile.getEmail();
-
-        if(login == null || password == null) {
-            return HttpStatus.BAD_REQUEST;
+    @PostMapping("/api/join")
+    public ResponseEntity signUp(@RequestBody(required = false) UserProfile profile) {
+        if (profile == null || profile.getLogin() == null || profile.getPassword() == null) {
+            final Message noLoginOrPasswordMsg = new Message("No login or password");
+            return ResponseEntity.badRequest().body(noLoginOrPasswordMsg);
         }
 
-        UserProfile user = accountService.getUserByLogin(login);
-        if(user == null) {
-            user = new UserProfile(login, password, email);
-            accountService.addUser(user);
-            return HttpStatus.OK;
-        } else {
-            return HttpStatus.CONFLICT;
+        if (profile.getLogin().isEmpty() || profile.getPassword().isEmpty()) {
+            final Message emptyLoginOrPasswordMsg = new Message("Empty login or password");
+            return ResponseEntity.badRequest().body(emptyLoginOrPasswordMsg);
         }
+
+        final UserProfile findedUserByLogin = accountService.getUserByLogin(profile.getLogin());
+
+        if (findedUserByLogin != null) {
+            final Message loginIsAlreadyTakenMsg = new Message("Login is already taken");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(loginIsAlreadyTakenMsg);
+        }
+
+        accountService.addUser(profile);
+        final Message signedUpMsg = new Message("User signed up");
+        return ResponseEntity.ok().body(signedUpMsg);
     }
 }
