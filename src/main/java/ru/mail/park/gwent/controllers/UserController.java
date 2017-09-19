@@ -2,10 +2,7 @@ package ru.mail.park.gwent.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.mail.park.gwent.account.AccountService;
 import ru.mail.park.gwent.account.UserProfile;
 import ru.mail.park.gwent.controllers.messages.Message;
@@ -14,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
 
+@CrossOrigin(origins = "https://testgwent.herokuapp.com")
 @RestController
 public class UserController {
     private final AccountService accountService;
