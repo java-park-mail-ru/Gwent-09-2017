@@ -18,6 +18,12 @@ public class UserProfile {
         return email;
     }
 
+    public void setProfile(UserProfile profile) {
+        login = profile.login;
+        password = profile.password;
+        email = profile.email;
+    }
+
     @SuppressWarnings("unused")
     public void setLogin(String login) {
         this.login = login;

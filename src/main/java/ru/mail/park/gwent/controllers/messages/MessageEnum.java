@@ -1,67 +1,72 @@
 package ru.mail.park.gwent.controllers.messages;
 
 public enum MessageEnum {
-    SIGNED_UP_MSG {
+    SIGNED_UP {
         @Override
         public Message getMessage() {
             return new Message("User signed up");
         }
     },
-    NO_LOGIN_OR_PASSWORD_MSG {
+    NO_LOGIN_OR_PASSWORD {
         @Override
         public Message getMessage() {
             return new Message("No login or password");
         }
     },
-    EMPTY_LOGIN_OR_PASSWORD_MSG {
+    EMPTY_LOGIN_OR_PASSWORD {
         @Override
         public Message getMessage() {
             return new Message("Empty login or password");
         }
     },
-    WRONG_LOGIN_OR_PASSWORD_MSG {
+    WRONG_LOGIN_OR_PASSWORD {
         @Override
         public Message getMessage() {
             return new Message("Wrong login or password");
         }
     },
-    LOGIN_IS_ALREADY_TAKEN_MSG {
+    LOGIN_IS_ALREADY_TAKEN {
         @Override
         public Message getMessage() {
             return new Message("Login is already taken");
         }
     },
-    AUTHORIZED_MSG {
+    AUTHORIZED {
         @Override
         public Message getMessage() {
             return new Message("User authorized");
         }
     },
-    LOGGED_OUT_MSG {
+    LOGGED_OUT {
         @Override
         public Message getMessage() {
             return new Message("User logged out");
         }
     },
-    NOT_AUTHORIZED_MSG {
+    NOT_AUTHORIZED {
         @Override
         public Message getMessage() {
             return new Message("User not authorized");
         }
     },
-    ALREADY_AUTHORIZED_MSG {
+    ALREADY_AUTHORIZED {
         @Override
         public Message getMessage() {
             return new Message("User is already authorized");
         }
     },
-    ANOTHER_ALREADY_AUTHORIZED_MSG {
+    ANOTHER_ALREADY_AUTHORIZED {
         @Override
         public Message getMessage() {
             return new Message("Another user is already authorized, try to logout and login again");
         }
+    },
+    USER_PROFILE_UPDATED {
+        @Override
+        public Message getMessage() {
+            return new Message("User profile data updated");
+        }
     };
 
-    @SuppressWarnings("unused")
     public abstract Message getMessage();
 }

@@ -23,6 +23,10 @@ public class AccountService {
         loginToProfile.put(userProfile.getLogin(), userProfile);
     }
 
+    public void deleteUser(String login) {
+        loginToProfile.remove(login);
+    }
+
     public UserProfile getUserBySessionId(String sessionId) {
         return sessionIdToProfile.get(sessionId);
     }
