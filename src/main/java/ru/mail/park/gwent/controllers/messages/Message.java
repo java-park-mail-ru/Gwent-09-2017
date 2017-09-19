@@ -1,4 +1,4 @@
-package ru.mail.park.gwent;
+package ru.mail.park.gwent.controllers.messages;
 
 public class Message {
     private final String message;

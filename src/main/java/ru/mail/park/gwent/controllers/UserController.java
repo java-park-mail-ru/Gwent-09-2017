@@ -5,17 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mail.park.gwent.Message;
 import ru.mail.park.gwent.account.AccountService;
 import ru.mail.park.gwent.account.UserProfile;
 
+import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
+
 @RestController
 public class UserController {
-    private static final Message SIGNED_UP_MSG = new Message("User signed up");
-    private static final Message NO_LOGIN_OR_PASSWORD_MSG = new Message("No login or password");
-    private static final Message EMPTY_LOGIN_OR_PASSWORD_MSG = new Message("Empty login or password");
-    private static final Message LOGIN_IS_ALREADY_TAKEN_MSG = new Message("Login is already taken");
-
     private final AccountService accountService;
 
     public UserController(AccountService accountService) {

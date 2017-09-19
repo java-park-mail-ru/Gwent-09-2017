@@ -3,24 +3,15 @@ package ru.mail.park.gwent.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mail.park.gwent.Message;
 import ru.mail.park.gwent.account.AccountService;
 import ru.mail.park.gwent.account.UserProfile;
 
 import javax.servlet.http.HttpSession;
 
+import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
+
 @RestController
 public class SessionController {
-    private static final Message AUTHORIZED_MSG = new Message("User authorized");
-    private static final Message LOGGED_OUT_MSG = new Message("User logged out");
-    private static final Message NOT_AUTHORIZED_MSG = new Message("User not authorized");
-    private static final Message ALREADY_AUTHORIZED_MSG = new Message("User is already authorized");
-    private static final Message NO_LOGIN_OR_PASSWORD_MSG = new Message("No login or password");
-    private static final Message EMPTY_LOGIN_OR_PASSWORD_MSG = new Message("Empty login or password");
-    private static final Message WRONG_LOGIN_OR_PASSWORD_MSG = new Message("Wrong login or password");
-    private static final Message ANOTHER_ALREADY_AUTHORIZED_MSG =
-            new Message("Another user is already authorized, try to logout and login again");
-
     private final AccountService accountService;
 
     public SessionController(AccountService accountService) {
