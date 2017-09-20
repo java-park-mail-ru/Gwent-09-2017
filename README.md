@@ -59,6 +59,6 @@ API к игре развернуто на хостинге: <https://technogwent
 
 ## Лицензия
 
-Код реализован под [MIT License](LICENSE).
+Код реализован под [MIT License](LICENSE.md).
 
 Проект является учебным и [CD PROJEKT RED](http://en.cdprojektred.com/) не выступают в качестве партнера.
