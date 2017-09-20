@@ -40,7 +40,6 @@ public class AccountService {
     }
 
     public void updateSession(String sessionId, UserProfile userProfile) {
-        deleteSession(sessionId);
         addSession(sessionId, userProfile);
     }
 }

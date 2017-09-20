@@ -5,6 +5,12 @@ public class UserProfile {
     private String password;
     private String email;
 
+    public UserProfile(String login, String password, String email) {
+        this.login = login;
+        this.password = password;
+        this.email = email;
+    }
+
     public String getLogin() {
         return login;
     }
@@ -16,21 +22,6 @@ public class UserProfile {
     @SuppressWarnings("unused")
     public String getEmail() {
         return email;
-    }
-
-    @SuppressWarnings("unused")
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    @SuppressWarnings("unused")
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @SuppressWarnings("unused")
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     @Override
