@@ -42,6 +42,9 @@ public class SessionController {
         }
 
         final UserProfile findedUserByLogin = accountService.getUserByLogin(profile.getLogin());
+        if (findedUserByLogin == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
+        }
 
         final String sessionId = session.getId();
         final UserProfile findedUserBySessionId = accountService.getUserBySessionId(sessionId);
@@ -55,7 +58,7 @@ public class SessionController {
             }
         }
 
-        if (findedUserByLogin == null || !findedUserByLogin.getPassword().equals(profile.getPassword())) {
+        if (!findedUserByLogin.getPassword().equals(profile.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 

@@ -56,9 +56,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
 
-        accountService.deleteUser(findedUserBySessionId.getLogin());
-        accountService.addUser(profile);
-        findedUserBySessionId.setProfile(profile);
+        accountService.updateUser(findedUserBySessionId.getLogin(), profile);
+        accountService.updateSession(sessionId, profile);
         return ResponseEntity.ok().body(USER_PROFILE_UPDATED.getMessage());
     }
 }

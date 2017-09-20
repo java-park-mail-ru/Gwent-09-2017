@@ -7,13 +7,8 @@ import java.util.Map;
 
 @Service
 public class AccountService {
-    private final Map<String, UserProfile> loginToProfile;
-    private final Map<String, UserProfile> sessionIdToProfile;
-
-    public AccountService() {
-        loginToProfile = new HashMap<>();
-        sessionIdToProfile = new HashMap<>();
-    }
+    private final Map<String, UserProfile> loginToProfile = new HashMap<>();
+    private final Map<String, UserProfile> sessionIdToProfile = new HashMap<>();
 
     public UserProfile getUserByLogin(String login) {
         return loginToProfile.get(login);
@@ -27,6 +22,11 @@ public class AccountService {
         loginToProfile.remove(login);
     }
 
+    public void updateUser(String currentLogin, UserProfile newProfile) {
+        deleteUser(currentLogin);
+        addUser(newProfile);
+    }
+
     public UserProfile getUserBySessionId(String sessionId) {
         return sessionIdToProfile.get(sessionId);
     }
@@ -37,5 +37,10 @@ public class AccountService {
 
     public void deleteSession(String sessionId) {
         sessionIdToProfile.remove(sessionId);
+    }
+
+    public void updateSession(String sessionId, UserProfile userProfile) {
+        deleteSession(sessionId);
+        addSession(sessionId, userProfile);
     }
 }
