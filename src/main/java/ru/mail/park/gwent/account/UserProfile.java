@@ -1,25 +1,33 @@
 package ru.mail.park.gwent.account;
 
+import com.fasterxml.jackson.annotation.*;
+
 public class UserProfile {
     private String login;
     private String password;
     private String email;
 
-    public UserProfile(String login, String password, String email) {
+    @JsonCreator
+    public UserProfile(
+            @JsonProperty("login") String login,
+            @JsonProperty("password") String password,
+            @JsonProperty("email") String email) {
         this.login = login;
         this.password = password;
         this.email = email;
     }
 
+    @JsonGetter
     public String getLogin() {
         return login;
     }
 
+    @JsonGetter
     public String getPassword() {
         return password;
     }
 
-    @SuppressWarnings("unused")
+    @JsonGetter
     public String getEmail() {
         return email;
     }
