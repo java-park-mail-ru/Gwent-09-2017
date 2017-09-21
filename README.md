@@ -12,6 +12,8 @@
 
 ## Описание API
 
+#### Версия 0.1.0
+
 Описание API приводится в виде страниц на [Wiki](https://github.com/java-park-mail-ru/Gwent-09-2017/wiki)
 
 * [Пользователь](https://github.com/java-park-mail-ru/Gwent-09-2017/wiki/User) - регистрация, модификация данных.
@@ -19,7 +21,7 @@
 
 ## Deploy
 
-API к игре развернуто на хостинге: <https://technogwent-api.herokuapp.com>
+API к игре развернуто на хостинге: <https://technogwent-api-010.herokuapp.com>
 
 ## Frontend
 
@@ -56,8 +58,8 @@ API к игре развернуто на хостинге: <https://technogwent
 
 **Александр Орел**
 
-* <https://t.me/orel_alexandr>
 * <https://github.com/aorel>
+* <https://t.me/orel_alexandr>
 
 ## Лицензия
 
