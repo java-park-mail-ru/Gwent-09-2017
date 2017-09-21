@@ -11,7 +11,8 @@ public enum MessageEnum {
     NOT_AUTHORIZED("User not authorized"),
     ALREADY_AUTHORIZED("User is already authorized"),
     ANOTHER_ALREADY_AUTHORIZED("Another user is already authorized, try to logout and login again"),
-    USER_PROFILE_UPDATED ("User profile data updated");
+    USER_PROFILE_UPDATED ("User profile data updated"),
+    LOGIN_IS_NOT_THE_SAME("Login is not the same. You can not modify login. You have to specify your login.");
 
     private Message message;
 

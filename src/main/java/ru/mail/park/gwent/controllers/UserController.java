@@ -21,32 +21,32 @@ public class UserController {
     }
 
     @PostMapping("/api/join")
-    public ResponseEntity<Message> signUp(@RequestBody(required = false) UserProfile profile) {
-        if (profile == null || profile.getLogin() == null || profile.getPassword() == null) {
+    public ResponseEntity<Message> signUp(@RequestBody(required = false) UserProfile newProfile) {
+        if (newProfile == null || newProfile.getLogin() == null || newProfile.getPassword() == null) {
             return ResponseEntity.badRequest().body(NO_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        if (profile.getLogin().isEmpty() || profile.getPassword().isEmpty()) {
+        if (newProfile.getLogin().isEmpty() || newProfile.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile findedUserByLogin = accountService.getUserByLogin(profile.getLogin());
+        final UserProfile findedUserByLogin = accountService.getUserByLogin(newProfile.getLogin());
 
         if (findedUserByLogin != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(LOGIN_IS_ALREADY_TAKEN.getMessage());
         }
 
-        accountService.addUser(profile);
+        accountService.addUser(newProfile);
         return ResponseEntity.ok().body(SIGNED_UP.getMessage());
     }
 
     @PutMapping("/api/user")
-    public ResponseEntity<Message> updateUserProfile(@RequestBody(required = false) UserProfile profile, HttpSession session) {
-        if (profile == null || profile.getLogin() == null || profile.getPassword() == null) {
+    public ResponseEntity<Message> updateUserProfile(@RequestBody(required = false) UserProfile updatedProfile, HttpSession session) {
+        if (updatedProfile == null || updatedProfile.getLogin() == null || updatedProfile.getPassword() == null) {
             return ResponseEntity.badRequest().body(NO_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        if (profile.getLogin().isEmpty() || profile.getPassword().isEmpty()) {
+        if (updatedProfile.getLogin().isEmpty() || updatedProfile.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
@@ -56,8 +56,14 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
 
-        accountService.updateUser(findedUserBySessionId.getLogin(), profile);
-        accountService.updateSession(sessionId, profile);
+        final String currentLogin = findedUserBySessionId.getLogin();
+        final String updatedProfileLogin = updatedProfile.getLogin();
+        if (!currentLogin.equals(updatedProfileLogin)) {
+            return ResponseEntity.badRequest().body(LOGIN_IS_NOT_THE_SAME.getMessage());
+        }
+
+        accountService.updateUser(currentLogin, updatedProfile);
+        accountService.updateSession(sessionId, updatedProfile);
         return ResponseEntity.ok().body(USER_PROFILE_UPDATED.getMessage());
     }
 }
