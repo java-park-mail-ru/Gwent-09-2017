@@ -23,6 +23,7 @@ public class AccountService {
         loginToProfile.remove(login);
     }
 
+
     public void updateUser(String login, UserProfile newProfile) {
         loginToProfile.put(login, newProfile);
     }
