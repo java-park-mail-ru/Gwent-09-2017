@@ -18,13 +18,13 @@ public class AccountService {
         loginToProfile.put(userProfile.getLogin(), userProfile);
     }
 
+    @SuppressWarnings("unused")
     public void deleteUser(String login) {
         loginToProfile.remove(login);
     }
 
-    public void updateUser(String currentLogin, UserProfile newProfile) {
-        deleteUser(currentLogin);
-        addUser(newProfile);
+    public void updateUser(String login, UserProfile newProfile) {
+        loginToProfile.put(login, newProfile);
     }
 
     public UserProfile getUserBySessionId(String sessionId) {
