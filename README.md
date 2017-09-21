@@ -31,14 +31,15 @@ API к игре развернуто на хостинге: <https://technogwent
 
 **Гулый Константин**
 
-* <https://t.me/kgulyy>
 * <https://github.com/kgulyy>
+* <https://t.me/kgulyy>
 
 ### Frontend
 
 **Вероника Персиянова**
 
 * <https://github.com/vpersiyanova>
+* <https://t.me/vpersiyanova>
 
 **Павел Хотин**
 
@@ -49,6 +50,7 @@ API к игре развернуто на хостинге: <https://technogwent
 **Валерий Зубаиров**
 
 * <https://github.com/ZubairovValeriy>
+* <https://t.me/ValeriyZubairov>
 
 ### Mentor
 
