@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
 
-@CrossOrigin(origins = "https://testgwent.herokuapp.com")
+@CrossOrigin(origins = "https://gwentteam.herokuapp.com")
 @RestController
 public class UserController {
     private final AccountService accountService;
