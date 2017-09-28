@@ -46,6 +46,7 @@ API к игре развернуто на хостинге: <https://technogwent
 **Павел Хотин**
 
 * <https://github.com/Paulik8>
+* <https://t.me/Paulik8>
 
 ### Designer
 
