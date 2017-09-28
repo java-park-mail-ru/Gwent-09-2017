@@ -34,33 +34,28 @@ API к игре развернуто на хостинге: <https://technogwent
 **Гулый Константин**
 
 * <https://github.com/kgulyy>
-* <https://t.me/kgulyy>
 
 ### Frontend
 
 **Вероника Персиянова**
 
 * <https://github.com/vpersiyanova>
-* <https://t.me/vpersiyanova>
 
 **Павел Хотин**
 
 * <https://github.com/Paulik8>
-* <https://t.me/Paulik8>
 
 ### Designer
 
 **Валерий Зубаиров**
 
 * <https://github.com/ZubairovValeriy>
-* <https://t.me/ValeriyZubairov>
 
 ### Mentor
 
 **Александр Орел**
 
 * <https://github.com/aorel>
-* <https://t.me/orel_alexandr>
 
 ## Лицензия
 
