@@ -14,10 +14,7 @@
 
 #### Версия 0.1.0
 
-Описание API приводится в виде страниц на [Wiki](https://github.com/java-park-mail-ru/Gwent-09-2017/wiki)
-
-* [Пользователь](https://github.com/java-park-mail-ru/Gwent-09-2017/wiki/User) - регистрация, модификация данных.
-* [Авторизация](https://github.com/java-park-mail-ru/Gwent-09-2017/wiki/Auth) - авторизация, выход из игры, получение данных о пользователе.
+Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/TechnoGwentAPI/0.1.0)
 
 ## Deploy
 

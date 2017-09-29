@@ -1,0 +1,212 @@
+swagger: '2.0'
+info:
+  title: TechnoGwent API
+  description: API браузерной мультиплеерной карточной игры ТехноГвинт
+  version: "0.1.0"
+  contact:
+    email: kgulyy@my.com
+  license:
+    name: MIT License
+    url: https://github.com/java-park-mail-ru/Gwent-09-2017/blob/master/LICENSE.md
+schemes:
+- https
+host: 'technogwent-api-010.herokuapp.com'
+basePath: /api
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /join:
+    post:
+      summary: Регистрация пользователя
+      description: |
+        Регистрация нового пользователя в игре.
+      operationId: signUp
+      parameters:
+      - name: Origin
+        in: header
+        description: Домен, с которого осуществлён запрос.
+        required: true
+        type: string
+      - name: UserProfile
+        in: body
+        description: Данные пользователя.
+        required: true
+        schema:
+          $ref: '#/definitions/UserProfile'
+      responses:
+        200:
+          description: |
+            Пользователь успешно зарегистрирован.
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: |
+            Логин / пароль не указаны или пусты.
+          schema:
+            $ref: '#/definitions/Error'
+        409:
+          description: |
+            Пользователь с таким логином уже присутсвует в базе данных.
+          schema:
+            $ref: '#/definitions/Error'
+  /user:
+    put:
+      summary: Изменение данных пользователя
+      description: |
+        Изменение пароля / e-mail пользователя.
+        Логин изменять нельзя.
+      operationId: updateUserProfile
+      parameters:
+      - name: Origin
+        in: header
+        description: Домен, с которого осуществлён запрос.
+        required: true
+        type: string
+      - name: UserProfile
+        in: body
+        description: |
+          Новые данные пользователя (пароль / e-mail)
+          Необходимо указать текущий логин пользователя.
+        required: true
+        schema:
+          $ref: '#/definitions/UserProfile'
+      responses:
+        200:
+          description: |
+            Данные пользователя обновлены успешно.
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: |
+            Логин / пароль не указаны или пусты.
+            Либо неверно указан текущий логин пользователя.
+          schema:
+            $ref: '#/definitions/Error'
+        401:
+          description: |
+            Пользователь не авторизован.
+          schema:
+            $ref: '#/definitions/Error'
+  /auth:
+    post:
+      summary: Авторизация пользователя
+      description: |
+        Авторизация пользователя в игре.
+      operationId: signIn
+      parameters:
+      - name: Origin
+        in: header
+        description: Домен, с которого осуществлён запрос.
+        required: true
+        type: string
+      - name: UserProfile
+        in: body
+        description: Данные пользователя.
+        required: true
+        schema:
+          $ref: '#/definitions/UserProfile'
+      responses:
+        200:
+          description: |
+            Пользователь успешно авторизован.
+            Либо пользователь уже авторизован.
+          schema:
+            $ref: '#/definitions/Message'
+        400:
+          description: |
+            Логин / пароль не указаны или пусты.
+          schema:
+            $ref: '#/definitions/Error'
+        403:
+          description: |
+            Логин / пароль неверны.
+            Либо пользователь уже авторизован и пытается авторизоваться под другим логином.
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      summary: Получение авторизованного пользователя
+      description: |
+        Получение данных об авторизованном пользователе
+      operationId: getLoggedUserProfile
+      parameters:
+      - name: Origin
+        in: header
+        description: Домен, с которого осуществлён запрос.
+        required: true
+        type: string
+      responses:
+        200:
+          description: |
+            Данные авторизованного пользователя.
+          schema:
+            $ref: '#/definitions/UserProfile'
+        401:
+          description: |
+            Пользователь не авторизован.
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      summary: Выход пользователя из игры
+      description: |
+        Выход пользователя из игры
+      operationId: signOut
+      parameters:
+      - name: Origin
+        in: header
+        description: Домен, с которого осуществлён запрос.
+        required: true
+        type: string
+      responses:
+        200:
+          description: |
+            Пользователь вышел из игры.
+          schema:
+            $ref: '#/definitions/Message'
+        401:
+          description: |
+            Пользователь не авторизован.
+          schema:
+            $ref: '#/definitions/Error'
+definitions:
+  UserProfile:
+    description: Информация о пользователе.
+    type: object
+    properties:
+      login:
+        type: string
+        format: identity
+        description: Имя пользователя (уникальное поле).
+        example: captain
+        x-isnullable: false
+      password:
+        type: string
+        description: Пароль пользователя
+        example: captain123
+        x-isnullable: false
+      email:
+        type: string
+        format: email
+        description: Почтовый адрес пользователя.
+        example: captain@blackpearl.sea
+        x-isnullable: true
+    required:
+    - login
+    - password
+  Message:
+    type: object
+    properties:
+      message:
+        type: string
+        readOnly: true
+        description: Текстовое сообщение.
+        example: Message example
+  Error:
+    type: object
+    properties:
+      message:
+        type: string
+        readOnly: true
+        description: Текстовое описание ошибки.
+        example: Error message example
