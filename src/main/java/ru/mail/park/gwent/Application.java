@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @SpringBootApplication
 public class Application {
     private static final String ORIGIN = "https://gwentteam.herokuapp.com";
+    private static final String LOCALHOST = "http://localhost:8000";
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -23,9 +24,9 @@ public class Application {
     private static class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/api/join").allowedOrigins(ORIGIN);
-            registry.addMapping("/api/user").allowedOrigins(ORIGIN);
-            registry.addMapping("/api/auth").allowedOrigins(ORIGIN);
+            registry.addMapping("/api/join").allowedOrigins(ORIGIN, LOCALHOST);
+            registry.addMapping("/api/user").allowedOrigins(ORIGIN, LOCALHOST).allowedMethods("PUT");
+            registry.addMapping("/api/auth").allowedOrigins(ORIGIN, LOCALHOST).allowedMethods("GET", "POST", "DELETE");
         }
     }
 }
