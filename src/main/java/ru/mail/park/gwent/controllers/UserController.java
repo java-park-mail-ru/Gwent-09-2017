@@ -1,11 +1,13 @@
 package ru.mail.park.gwent.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.controllers.messages.Message;
-import ru.mail.park.gwent.services.AccountService;
+import ru.mail.park.gwent.services.SessionService;
+import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,10 +15,13 @@ import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
 
 @RestController
 public class UserController {
-    private final AccountService accountService;
+    private final UserService userService;
+    private final SessionService sessionService;
 
-    public UserController(AccountService accountService) {
-        this.accountService = accountService;
+    @Autowired
+    UserController(UserService userService, SessionService sessionService) {
+        this.userService = userService;
+        this.sessionService = sessionService;
     }
 
     @PostMapping("/api/join")
@@ -29,13 +34,13 @@ public class UserController {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile findedUserByLogin = accountService.getUserByLogin(newProfile.getLogin());
+        final UserProfile findedUserByLogin = userService.getUserByLogin(newProfile.getLogin());
 
         if (findedUserByLogin != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(LOGIN_IS_ALREADY_TAKEN.getMessage());
         }
 
-        accountService.addUser(newProfile);
+        userService.createUser(newProfile);
         return ResponseEntity.ok().body(SIGNED_UP.getMessage());
     }
 
@@ -50,7 +55,7 @@ public class UserController {
         }
 
         final String sessionId = session.getId();
-        final UserProfile findedUserBySessionId = accountService.getUserBySessionId(sessionId);
+        final UserProfile findedUserBySessionId = sessionService.getUserBySessionId(sessionId);
         if (findedUserBySessionId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
@@ -61,8 +66,8 @@ public class UserController {
             return ResponseEntity.badRequest().body(LOGIN_IS_NOT_THE_SAME.getMessage());
         }
 
-        accountService.updateUser(currentLogin, updatedProfile);
-        accountService.updateSession(sessionId, updatedProfile);
+        userService.updateUser(currentLogin, updatedProfile);
+        sessionService.updateSession(sessionId, updatedProfile);
         return ResponseEntity.ok().body(USER_PROFILE_UPDATED.getMessage());
     }
 }
