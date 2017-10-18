@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.account;
+package ru.mail.park.gwent.domains;
 
 import com.fasterxml.jackson.annotation.*;
 

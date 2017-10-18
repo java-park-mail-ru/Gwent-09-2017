@@ -1,6 +1,7 @@
-package ru.mail.park.gwent.account;
+package ru.mail.park.gwent.services;
 
 import org.springframework.stereotype.Service;
+import ru.mail.park.gwent.domains.UserProfile;
 
 import java.util.HashMap;
 import java.util.Map;
