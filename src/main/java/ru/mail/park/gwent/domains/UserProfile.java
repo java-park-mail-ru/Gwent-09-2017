@@ -33,6 +33,10 @@ public class UserProfile {
         return login;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     @JsonGetter
     public String getPassword() {
         return password;
