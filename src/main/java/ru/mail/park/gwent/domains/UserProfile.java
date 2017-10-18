@@ -2,7 +2,14 @@ package ru.mail.park.gwent.domains;
 
 import com.fasterxml.jackson.annotation.*;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class UserProfile {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String login;
     private String password;
     private String email;
@@ -15,6 +22,10 @@ public class UserProfile {
         this.login = login;
         this.password = password;
         this.email = email;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     @JsonGetter
