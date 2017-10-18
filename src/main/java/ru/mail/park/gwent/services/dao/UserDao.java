@@ -11,11 +11,11 @@ import javax.persistence.PersistenceException;
 
 @Service
 @Transactional
-public class UserJpaDao implements UserService {
+public class UserDao implements UserService {
 
     private final EntityManager em;
 
-    public UserJpaDao(EntityManager em) {
+    public UserDao(EntityManager em) {
         this.em = em;
     }
 

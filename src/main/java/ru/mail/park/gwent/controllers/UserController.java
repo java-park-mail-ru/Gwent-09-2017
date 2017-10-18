@@ -20,7 +20,7 @@ public class UserController {
     private final SessionService sessionService;
 
     @Autowired
-    UserController(@Qualifier("userJpaDao") UserService userService, SessionService sessionService) {
+    UserController(UserService userService, SessionService sessionService) {
         this.userService = userService;
         this.sessionService = sessionService;
     }
