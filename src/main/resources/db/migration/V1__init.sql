@@ -1,5 +1,5 @@
 CREATE TABLE users (
-  login    TEXT PRIMARY KEY,
-  password TEXT NOT NULL,
-  email    TEXT
+  login    VARCHAR(20) PRIMARY KEY,
+  password VARCHAR(20) NOT NULL,
+  email    VARCHAR(25)
 );
