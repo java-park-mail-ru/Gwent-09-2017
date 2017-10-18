@@ -3,9 +3,9 @@ package ru.mail.park.gwent.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.mail.park.gwent.services.AccountService;
 import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.controllers.messages.Message;
+import ru.mail.park.gwent.services.AccountService;
 
 import javax.servlet.http.HttpSession;
 
