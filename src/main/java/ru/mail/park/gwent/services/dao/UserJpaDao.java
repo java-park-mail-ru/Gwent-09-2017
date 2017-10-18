@@ -41,7 +41,6 @@ public class UserJpaDao implements UserService {
 
     @Override
     public void updateUser(String login, UserProfile newProfile) {
-        newProfile.setLogin(login);
-        em.persist(newProfile);
+        em.merge(newProfile);
     }
 }

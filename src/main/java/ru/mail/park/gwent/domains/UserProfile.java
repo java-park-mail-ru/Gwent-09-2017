@@ -8,11 +8,12 @@ import javax.persistence.*;
 @Table(name = "users")
 public class UserProfile {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
     private String login;
     private String password;
     private String email;
+
+    public UserProfile() {
+    }
 
     @JsonCreator
     public UserProfile(
@@ -22,10 +23,6 @@ public class UserProfile {
         this.login = login;
         this.password = password;
         this.email = email;
-    }
-
-    public Integer getId() {
-        return id;
     }
 
     @JsonGetter
