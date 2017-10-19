@@ -18,7 +18,7 @@
 
 ## Deploy
 
-API к игре развернуто на хостинге: <https://technogwent-api-010.herokuapp.com>
+API к игре развернуто на хостинге: <https://technogwent-api-011.herokuapp.com>
 
 ## Frontend
 
