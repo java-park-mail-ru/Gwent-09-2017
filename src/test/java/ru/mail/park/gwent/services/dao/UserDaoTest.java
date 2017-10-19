@@ -12,9 +12,7 @@ import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 import ru.mail.park.gwent.services.exceptions.DuplicateUserException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -69,7 +67,7 @@ public class UserDaoTest {
     }
 
     @Test
-    public void testGetUserByLogin() throws Exception {
+    public void testGetUserByLogin() {
         final UserProfile user = new UserProfile(LOGIN, PASSWORD, EMAIL);
         final UserProfile createdUser = userService.createUser(user);
 
@@ -79,7 +77,7 @@ public class UserDaoTest {
     }
 
     @Test
-    public void updateUser() throws Exception {
+    public void updateUser() {
         final UserProfile user = new UserProfile(LOGIN, PASSWORD, EMAIL);
         userService.createUser(user);
         user.setPassword(UPDATED_PASSWORD);
