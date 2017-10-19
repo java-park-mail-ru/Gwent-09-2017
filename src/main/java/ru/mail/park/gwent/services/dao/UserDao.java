@@ -20,18 +20,18 @@ public class UserDao implements UserService {
     }
 
     @Override
-    public void createUser(UserProfile userProfile) {
+    public UserProfile createUser(UserProfile profile) {
         try {
-            em.persist(userProfile);
+            em.persist(profile);
         } catch (PersistenceException ex) {
-            throw new DuplicateUserException(userProfile.getLogin(), ex);
+            throw new DuplicateUserException(profile.getLogin(), ex);
         }
+        return profile;
     }
 
     @Override
-    public void deleteUser(String login) {
-        final UserProfile user = getUserByLogin(login);
-        em.remove(user);
+    public void deleteUser(UserProfile profile) {
+        em.remove(profile);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class UserDao implements UserService {
     }
 
     @Override
-    public void updateUser(String login, UserProfile newProfile) {
-        em.merge(newProfile);
+    public UserProfile updateUser(UserProfile profile) {
+        return em.merge(profile);
     }
 }

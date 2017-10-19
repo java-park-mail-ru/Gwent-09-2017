@@ -66,7 +66,8 @@ public class UserController {
             return ResponseEntity.badRequest().body(LOGIN_IS_NOT_THE_SAME.getMessage());
         }
 
-        userService.updateUser(currentLogin, updatedProfile);
+        updatedProfile.setLogin(currentLogin);
+        userService.updateUser(updatedProfile);
         sessionService.updateSession(sessionId, updatedProfile);
         return ResponseEntity.ok().body(USER_PROFILE_UPDATED.getMessage());
     }
