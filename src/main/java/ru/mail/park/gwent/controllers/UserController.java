@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.controllers.messages.Message;
-import ru.mail.park.gwent.services.SessionService;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -16,12 +15,10 @@ import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
 @RestController
 public class UserController {
     private final UserService userService;
-    private final SessionService sessionService;
 
     @Autowired
-    UserController(UserService userService, SessionService sessionService) {
+    UserController(UserService userService) {
         this.userService = userService;
-        this.sessionService = sessionService;
     }
 
     @PostMapping("/api/join")
@@ -55,7 +52,7 @@ public class UserController {
         }
 
         final String sessionId = session.getId();
-        final UserProfile findedUserBySessionId = sessionService.getUserBySessionId(sessionId);
+        final UserProfile findedUserBySessionId = (UserProfile) session.getAttribute(sessionId);
         if (findedUserBySessionId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
@@ -68,7 +65,7 @@ public class UserController {
 
         updatedProfile.setLogin(currentLogin);
         userService.updateUser(updatedProfile);
-        sessionService.updateSession(sessionId, updatedProfile);
+        session.setAttribute(sessionId, updatedProfile);
         return ResponseEntity.ok().body(USER_PROFILE_UPDATED.getMessage());
     }
 }
