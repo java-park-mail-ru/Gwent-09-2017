@@ -3,7 +3,9 @@ package ru.mail.park.gwent.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import ru.mail.park.gwent.domains.UserInfo;
 import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.controllers.messages.Message;
 import ru.mail.park.gwent.services.UserService;
@@ -15,20 +17,23 @@ import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
 @RestController
 public class SessionController {
     private final UserService userService;
+    private final PasswordEncoder encoder;
 
     @Autowired
-    SessionController(UserService userService) {
+    SessionController(UserService userService, PasswordEncoder encoder) {
         this.userService = userService;
+        this.encoder = encoder;
     }
 
     @GetMapping("/api/auth")
     public ResponseEntity getLoggedUserProfile(HttpSession session) {
         final String sessionId = session.getId();
-        final UserProfile findedUserBySessionId = (UserProfile) session.getAttribute(sessionId);
-        if (findedUserBySessionId == null) {
+        final UserProfile sessionUser = (UserProfile) session.getAttribute(sessionId);
+        if (sessionUser == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         } else {
-            return ResponseEntity.ok(findedUserBySessionId);
+            final UserInfo userInfo = new UserInfo(sessionUser.getLogin(), sessionUser.getEmail());
+            return ResponseEntity.ok(userInfo);
         }
     }
 
@@ -59,7 +64,7 @@ public class SessionController {
             }
         }
 
-        if (!findedUserByLogin.getPassword().equals(profile.getPassword())) {
+        if (!encoder.matches(profile.getPassword(), findedUserByLogin.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 

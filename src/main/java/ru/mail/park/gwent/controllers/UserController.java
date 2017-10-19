@@ -3,6 +3,7 @@ package ru.mail.park.gwent.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.controllers.messages.Message;
@@ -15,10 +16,12 @@ import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
 @RestController
 public class UserController {
     private final UserService userService;
+    private final PasswordEncoder encoder;
 
     @Autowired
-    UserController(UserService userService) {
+    UserController(UserService userService, PasswordEncoder encoder) {
         this.userService = userService;
+        this.encoder = encoder;
     }
 
     @PostMapping("/api/join")
@@ -37,7 +40,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(LOGIN_IS_ALREADY_TAKEN.getMessage());
         }
 
+        newProfile.setPassword(encoder.encode(newProfile.getPassword()));
         userService.createUser(newProfile);
+
         return ResponseEntity.ok().body(SIGNED_UP.getMessage());
     }
 
@@ -64,6 +69,7 @@ public class UserController {
         }
 
         updatedProfile.setLogin(currentLogin);
+        updatedProfile.setPassword(encoder.encode(updatedProfile.getPassword()));
         userService.updateUser(updatedProfile);
         session.setAttribute(sessionId, updatedProfile);
         return ResponseEntity.ok().body(USER_PROFILE_UPDATED.getMessage());
