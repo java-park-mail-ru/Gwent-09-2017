@@ -12,7 +12,7 @@
 
 ## Описание API
 
-#### Версия 0.1.0
+#### Версия 0.1.1
 
 Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/TechnoGwentAPI/0.1.0)
 
