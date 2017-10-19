@@ -12,11 +12,6 @@ public class SessionDao implements SessionService {
     private final Map<String, UserProfile> sessionIdToProfile = new HashMap<>();
 
     @Override
-    public UserProfile getUserBySessionId(String sessionId) {
-        return sessionIdToProfile.get(sessionId);
-    }
-
-    @Override
     public void addSession(String sessionId, UserProfile userProfile) {
         sessionIdToProfile.put(sessionId, userProfile);
     }
@@ -24,6 +19,11 @@ public class SessionDao implements SessionService {
     @Override
     public void deleteSession(String sessionId) {
         sessionIdToProfile.remove(sessionId);
+    }
+
+    @Override
+    public UserProfile getUserBySessionId(String sessionId) {
+        return sessionIdToProfile.get(sessionId);
     }
 
     @Override

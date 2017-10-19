@@ -61,13 +61,33 @@ public class UserProfile {
             return false;
         }
 
-        final UserProfile userProfile = (UserProfile) obj;
+        final UserProfile user = (UserProfile) obj;
 
-        return login.equals(userProfile.login);
+        if (!login.equals(user.login)) {
+            return false;
+        }
+        if (!password.equals(user.password)) {
+            return false;
+        }
+        if (email != null) {
+            return email.equals(user.email);
+        } else {
+            return user.email == null;
+        }
     }
 
     @Override
     public int hashCode() {
-        return login.hashCode();
+        int result = login.hashCode();
+        final int primeNumber = 31;
+        result = primeNumber * result + password.hashCode();
+
+        int emailHashCode = 0;
+        if (email != null) {
+            emailHashCode = email.hashCode();
+        }
+
+        result = primeNumber * result + emailHashCode;
+        return result;
     }
 }
