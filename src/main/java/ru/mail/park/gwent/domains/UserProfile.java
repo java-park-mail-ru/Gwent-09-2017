@@ -15,7 +15,8 @@ public class UserProfile {
     @JsonProperty("email")
     private String email;
 
-    public UserProfile() {}
+    public UserProfile() {
+    }
 
     @JsonCreator
     public UserProfile(String login, String password, String email) {
