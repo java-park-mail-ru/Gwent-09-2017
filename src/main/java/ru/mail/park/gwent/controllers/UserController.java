@@ -32,9 +32,9 @@ public class UserController {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile findedUserByLogin = userService.getUserByLogin(newProfile.getLogin());
+        final UserProfile foundUserByLogin = userService.getUserByLogin(newProfile.getLogin());
 
-        if (findedUserByLogin != null) {
+        if (foundUserByLogin != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(LOGIN_IS_ALREADY_TAKEN.getMessage());
         }
 
