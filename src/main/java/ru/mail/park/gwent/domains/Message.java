@@ -3,11 +3,10 @@ package ru.mail.park.gwent.domains;
 import com.fasterxml.jackson.annotation.*;
 
 public class Message {
-    @JsonProperty("message")
     private String message;
 
     @JsonCreator
-    public Message(String message) {
+    public Message(@JsonProperty("message") String message) {
         this.message = message;
     }
 

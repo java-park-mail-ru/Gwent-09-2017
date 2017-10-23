@@ -8,18 +8,18 @@ import javax.persistence.*;
 @Table(name = "users")
 public class UserProfile {
     @Id
-    @JsonProperty("login")
     private String login;
-    @JsonProperty("password")
     private String password;
-    @JsonProperty("email")
     private String email;
 
     public UserProfile() {
     }
 
     @JsonCreator
-    public UserProfile(String login, String password, String email) {
+    public UserProfile(
+            @JsonProperty("login") String login,
+            @JsonProperty("password") String password,
+            @JsonProperty("email") String email) {
         this.login = login;
         this.password = password;
         this.email = email;
