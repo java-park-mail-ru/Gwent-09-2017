@@ -29,11 +29,11 @@ public class SessionController {
     @GetMapping
     public ResponseEntity getLoggedUserProfile(HttpSession session) {
         final String sessionId = session.getId();
-        final UserProfile sessionUser = (UserProfile) session.getAttribute(sessionId);
-        if (sessionUser == null) {
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         } else {
-            final UserInfo userInfo = new UserInfo(sessionUser.getLogin(), sessionUser.getEmail());
+            final UserInfo userInfo = new UserInfo(foundUserBySession.getLogin(), foundUserBySession.getEmail());
             return ResponseEntity.ok(userInfo);
         }
     }
@@ -48,15 +48,15 @@ public class SessionController {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile findedUserByLogin = userService.getUserByLogin(profile.getLogin());
-        if (findedUserByLogin == null) {
+        final UserProfile foundUserByLogin = userService.getUserByLogin(profile.getLogin());
+        if (foundUserByLogin == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
         final String sessionId = session.getId();
-        final UserProfile findedUserBySessionId = (UserProfile) session.getAttribute(sessionId);
-        if (findedUserBySessionId != null) {
-            if (findedUserBySessionId.equals(findedUserByLogin)) {
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        if (foundUserBySession != null) {
+            if (foundUserBySession.equals(foundUserByLogin)) {
                 // пользователь авторизован и пытается авторизоваться под своим именем еще раз
                 return ResponseEntity.ok().body(ALREADY_AUTHORIZED.getMessage());
             } else {
@@ -65,20 +65,20 @@ public class SessionController {
             }
         }
 
-        if (!encoder.matches(profile.getPassword(), findedUserByLogin.getPassword())) {
+        if (!encoder.matches(profile.getPassword(), foundUserByLogin.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        session.setAttribute(sessionId, findedUserByLogin);
+        session.setAttribute(sessionId, foundUserByLogin);
         return ResponseEntity.ok().body(AUTHORIZED.getMessage());
     }
 
     @DeleteMapping
     public ResponseEntity<Message> signOut(HttpSession session) {
         final String sessionId = session.getId();
-        final UserProfile findedUserBySessionId = (UserProfile) session.getAttribute(sessionId);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
 
-        if (findedUserBySessionId == null) {
+        if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
 
