@@ -14,6 +14,9 @@ import ru.mail.park.gwent.services.exceptions.DuplicateUserException;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Konstantin Gulyy
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional

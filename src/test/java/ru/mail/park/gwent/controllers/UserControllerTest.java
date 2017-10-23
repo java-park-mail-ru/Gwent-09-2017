@@ -1,6 +1,5 @@
 package ru.mail.park.gwent.controllers;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -26,6 +24,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static ru.mail.park.gwent.domains.MessageEnum.*;
 
+/**
+ * @author Konstantin Gulyy
+ */
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class UserControllerTest {
@@ -35,25 +36,18 @@ public class UserControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static final HttpHeaders REQUEST_HEADERS = new HttpHeaders();
     private static final String SIGN_UP_URL = "/api/join";
     private static final String LOGIN = "login";
     private static final String EMAIL = "email@email.ru";
     private static final String PASSWORD = "password";
 
-    @BeforeClass
-    public static void setHttpHeaders() {
-        final List<String> origin = Collections.singletonList("http://localhost:8000");
-        REQUEST_HEADERS.put(HttpHeaders.ORIGIN, origin);
-        final List<String> contentType = Collections.singletonList("application/json");
-        REQUEST_HEADERS.put(HttpHeaders.CONTENT_TYPE, contentType);
-    }
-
     @Test
     public void testSignUpEmptyBody() {
-        final HttpEntity<UserProfile> requestEntity = new HttpEntity<>(REQUEST_HEADERS);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.put(HttpHeaders.CONTENT_TYPE, Collections.singletonList("application/json"));
+        final HttpEntity<Void> request = new HttpEntity<>(headers);
 
-        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, requestEntity, Message.class);
+        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, request, Message.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(NO_LOGIN_OR_PASSWORD.getMessage(), response.getBody());
@@ -62,9 +56,8 @@ public class UserControllerTest {
     @Test
     public void testSignUpEmptyLoginAndPassword() {
         final UserProfile user = new UserProfile("", "", null);
-        final HttpEntity<UserProfile> requestEntity = new HttpEntity<>(user, REQUEST_HEADERS);
 
-        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, requestEntity, Message.class);
+        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, user, Message.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(EMPTY_LOGIN_OR_PASSWORD.getMessage(), response.getBody());
@@ -76,9 +69,8 @@ public class UserControllerTest {
         when(userService.getUserByLogin(anyString())).thenReturn(emptyUser);
 
         final UserProfile newProfile = new UserProfile(LOGIN, PASSWORD, EMAIL);
-        final HttpEntity<UserProfile> requestEntity = new HttpEntity<>(newProfile, REQUEST_HEADERS);
 
-        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, requestEntity, Message.class);
+        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, newProfile, Message.class);
 
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertEquals(LOGIN_IS_ALREADY_TAKEN.getMessage(), response.getBody());
@@ -88,9 +80,8 @@ public class UserControllerTest {
     @Test
     public void testSignUpSuccess() {
         final UserProfile newProfile = new UserProfile(LOGIN, PASSWORD, EMAIL);
-        final HttpEntity<UserProfile> requestEntity = new HttpEntity<>(newProfile, REQUEST_HEADERS);
 
-        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, requestEntity, Message.class);
+        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, newProfile, Message.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(SIGNED_UP.getMessage(), response.getBody());
