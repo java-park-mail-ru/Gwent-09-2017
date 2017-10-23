@@ -51,44 +51,6 @@ paths:
             Пользователь с таким логином уже присутсвует в базе данных.
           schema:
             $ref: '#/definitions/Error'
-  /user:
-    put:
-      summary: Изменение данных пользователя
-      description: |
-        Изменение пароля / e-mail пользователя.
-        Логин изменять нельзя.
-      operationId: updateUserProfile
-      parameters:
-      - name: Origin
-        in: header
-        description: Домен, с которого осуществлён запрос.
-        required: true
-        type: string
-      - name: UserProfile
-        in: body
-        description: |
-          Новые данные пользователя (пароль / e-mail)
-          Необходимо указать текущий логин пользователя.
-        required: true
-        schema:
-          $ref: '#/definitions/UserProfile'
-      responses:
-        200:
-          description: |
-            Данные пользователя обновлены успешно.
-          schema:
-            $ref: '#/definitions/Message'
-        400:
-          description: |
-            Логин / пароль не указаны или пусты.
-            Либо неверно указан текущий логин пользователя.
-          schema:
-            $ref: '#/definitions/Error'
-        401:
-          description: |
-            Пользователь не авторизован.
-          schema:
-            $ref: '#/definitions/Error'
   /auth:
     post:
       summary: Авторизация пользователя
