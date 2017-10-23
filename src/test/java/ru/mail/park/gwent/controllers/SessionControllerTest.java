@@ -2,33 +2,34 @@ package ru.mail.park.gwent.controllers;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.mail.park.gwent.domains.Message;
 import ru.mail.park.gwent.domains.UserInfo;
 import ru.mail.park.gwent.domains.UserProfile;
-
-import javax.servlet.http.HttpSession;
+import ru.mail.park.gwent.services.UserService;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static ru.mail.park.gwent.domains.MessageEnum.AUTHORIZED;
 import static ru.mail.park.gwent.domains.MessageEnum.NOT_AUTHORIZED;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @RunWith(SpringRunner.class)
 public class SessionControllerTest {
-    @Mock
-    private HttpSession session;
-
+    @MockBean
+    private UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -39,24 +40,33 @@ public class SessionControllerTest {
 
     @Test
     public void testGetLoggedUserUnauthorized() {
-        when(session.getAttribute(anyString())).thenReturn(null);
-
         final ResponseEntity<Message> response = restTemplate.getForEntity(AUTH_URL, Message.class);
 
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals(NOT_AUTHORIZED.getMessage(), response.getBody());
-        verify(session).getAttribute(anyString());
     }
 
     @Test
-    public void testGetLoggedUserSuccess() {
-        final UserProfile foundUserProfile = new UserProfile(LOGIN, PASSWORD, EMAIL);
-        when(session.getAttribute(anyString())).thenReturn(foundUserProfile);
+    public void testLoginSuccess() {
+        final UserProfile userMock = new UserProfile(LOGIN, passwordEncoder.encode(PASSWORD), EMAIL);
+        when(userService.getUserByLogin(eq(LOGIN))).thenReturn(userMock);
 
-        final ResponseEntity<UserInfo> response = restTemplate.getForEntity(AUTH_URL, UserInfo.class);
+        final UserProfile login = new UserProfile(LOGIN, PASSWORD, EMAIL);
+        final ResponseEntity<Message> loginResponse = restTemplate.postForEntity(AUTH_URL, login, Message.class);
+
+        verify(userService).getUserByLogin(eq(LOGIN));
+        assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
+        assertEquals(AUTHORIZED.getMessage(), loginResponse.getBody());
+
+        final HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.put(HttpHeaders.COOKIE, loginResponse.getHeaders().get("Set-Cookie"));
+        final HttpEntity<Void> requestEntity = new HttpEntity<>(requestHeaders);
+
+        final ResponseEntity<UserInfo> response = restTemplate.exchange(AUTH_URL, HttpMethod.GET, requestEntity, UserInfo.class);
+
         final UserInfo userInfo = response.getBody();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
         assertNotNull(userInfo);
         assertEquals(LOGIN, userInfo.getLogin());
         assertEquals(EMAIL, userInfo.getEmail());
