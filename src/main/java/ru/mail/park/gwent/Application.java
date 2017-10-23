@@ -7,7 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 public class Application {
@@ -25,15 +24,22 @@ public class Application {
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
-        return new MyWebMvcConfigurerAdapter();
+        return new WebCorsConfig();
     }
 
-    private static class MyWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
+    private static class WebCorsConfig implements WebMvcConfigurer {
         @Override
         public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/api/join").allowedOrigins(ORIGIN, LOCALHOST);
-            registry.addMapping("/api/user").allowedOrigins(ORIGIN, LOCALHOST).allowedMethods("PUT");
-            registry.addMapping("/api/auth").allowedOrigins(ORIGIN, LOCALHOST).allowedMethods("GET", "POST", "DELETE");
+            registry.addMapping("/api/join")
+                    .allowedOrigins(ORIGIN, LOCALHOST);
+
+            registry.addMapping("/api/user")
+                    .allowedOrigins(ORIGIN, LOCALHOST)
+                    .allowedMethods("PUT");
+
+            registry.addMapping("/api/auth")
+                    .allowedOrigins(ORIGIN, LOCALHOST)
+                    .allowedMethods("GET", "POST", "DELETE");
         }
     }
 }
