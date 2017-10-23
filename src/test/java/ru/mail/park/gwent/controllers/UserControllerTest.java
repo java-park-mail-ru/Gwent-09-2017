@@ -33,6 +33,7 @@ public class UserControllerTest {
     private TestRestTemplate restTemplate;
 
     private static final HttpHeaders REQUEST_HEADERS = new HttpHeaders();
+    private static final String SIGN_UP_URL = "/api/join";
     private static final String LOGIN = "login";
     private static final String EMAIL = "email@email.ru";
     private static final String PASSWORD = "password";
@@ -49,7 +50,7 @@ public class UserControllerTest {
     public void testSignUpEmptyBody() {
         final HttpEntity<UserProfile> requestEntity = new HttpEntity<>(REQUEST_HEADERS);
 
-        final ResponseEntity<Message> response = restTemplate.postForEntity("/api/join", requestEntity, Message.class);
+        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, requestEntity, Message.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(NO_LOGIN_OR_PASSWORD.getMessage(), response.getBody());
@@ -60,7 +61,7 @@ public class UserControllerTest {
         final UserProfile user = new UserProfile("", "", null);
         final HttpEntity<UserProfile> requestEntity = new HttpEntity<>(user, REQUEST_HEADERS);
 
-        final ResponseEntity<Message> response = restTemplate.postForEntity("/api/join", requestEntity, Message.class);
+        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, requestEntity, Message.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals(EMPTY_LOGIN_OR_PASSWORD.getMessage(), response.getBody());
@@ -74,7 +75,7 @@ public class UserControllerTest {
         final UserProfile newProfile = new UserProfile(LOGIN, PASSWORD, EMAIL);
         final HttpEntity<UserProfile> requestEntity = new HttpEntity<>(newProfile, REQUEST_HEADERS);
 
-        final ResponseEntity<Message> response = restTemplate.postForEntity("/api/join", requestEntity, Message.class);
+        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, requestEntity, Message.class);
 
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertEquals(LOGIN_IS_ALREADY_TAKEN.getMessage(), response.getBody());
@@ -86,7 +87,7 @@ public class UserControllerTest {
         final UserProfile newProfile = new UserProfile(LOGIN, PASSWORD, EMAIL);
         final HttpEntity<UserProfile> requestEntity = new HttpEntity<>(newProfile, REQUEST_HEADERS);
 
-        final ResponseEntity<Message> response = restTemplate.postForEntity("/api/join", requestEntity, Message.class);
+        final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, requestEntity, Message.class);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(SIGNED_UP.getMessage(), response.getBody());
