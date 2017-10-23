@@ -1,6 +1,7 @@
 package ru.mail.park.gwent.domains;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserInfo {
     private String login;

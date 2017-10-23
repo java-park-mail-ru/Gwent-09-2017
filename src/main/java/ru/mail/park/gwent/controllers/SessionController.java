@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import ru.mail.park.gwent.domains.Message;
 import ru.mail.park.gwent.domains.UserInfo;
 import ru.mail.park.gwent.domains.UserProfile;
-import ru.mail.park.gwent.domains.Message;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import static ru.mail.park.gwent.domains.MessageEnum.*;
 
 @RestController
+@RequestMapping("/api/auth")
 public class SessionController {
     private final UserService userService;
     private final PasswordEncoder encoder;
@@ -25,7 +26,7 @@ public class SessionController {
         this.encoder = encoder;
     }
 
-    @GetMapping("/api/auth")
+    @GetMapping
     public ResponseEntity getLoggedUserProfile(HttpSession session) {
         final String sessionId = session.getId();
         final UserProfile sessionUser = (UserProfile) session.getAttribute(sessionId);
@@ -37,7 +38,7 @@ public class SessionController {
         }
     }
 
-    @PostMapping("/api/auth")
+    @PostMapping
     public ResponseEntity<Message> signIn(@RequestBody(required = false) UserProfile profile, HttpSession session) {
         if (profile == null || profile.getLogin() == null || profile.getPassword() == null) {
             return ResponseEntity.badRequest().body(NO_LOGIN_OR_PASSWORD.getMessage());
@@ -72,7 +73,7 @@ public class SessionController {
         return ResponseEntity.ok().body(AUTHORIZED.getMessage());
     }
 
-    @DeleteMapping("/api/auth")
+    @DeleteMapping
     public ResponseEntity<Message> signOut(HttpSession session) {
         final String sessionId = session.getId();
         final UserProfile findedUserBySessionId = (UserProfile) session.getAttribute(sessionId);

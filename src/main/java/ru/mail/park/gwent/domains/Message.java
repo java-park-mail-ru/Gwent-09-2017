@@ -1,6 +1,8 @@
 package ru.mail.park.gwent.domains;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Message {
     private String message;
@@ -13,11 +15,6 @@ public class Message {
     @JsonGetter
     public String getMessage() {
         return message;
-    }
-
-    @JsonSetter
-    public void setMessage(String message) {
-        this.message = message;
     }
 
     @Override

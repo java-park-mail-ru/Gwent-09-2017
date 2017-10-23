@@ -1,8 +1,11 @@
 package ru.mail.park.gwent.domains;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
@@ -25,33 +28,46 @@ public class UserProfile {
         this.email = email;
     }
 
-    @JsonGetter
     public String getLogin() {
         return login;
     }
 
-    @JsonSetter
     public void setLogin(String login) {
         this.login = login;
     }
 
-    @JsonGetter
     public String getPassword() {
         return password;
     }
 
-    @JsonSetter
     public void setPassword(String password) {
         this.password = password;
     }
 
-    @JsonGetter
     public String getEmail() {
         return email;
     }
 
-    @JsonSetter
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        final UserProfile user = (UserProfile) obj;
+
+        return login.equals(user.login);
+    }
+
+    @Override
+    public int hashCode() {
+        return login.hashCode();
     }
 }
