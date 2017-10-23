@@ -8,18 +8,18 @@ import javax.persistence.*;
 @Table(name = "users")
 public class UserProfile {
     @Id
+    @JsonProperty("login")
     private String login;
+    @JsonProperty("password")
     private String password;
+    @JsonProperty("email")
     private String email;
 
     public UserProfile() {
     }
 
     @JsonCreator
-    public UserProfile(
-            @JsonProperty("login") String login,
-            @JsonProperty("password") String password,
-            @JsonProperty("email") String email) {
+    public UserProfile(String login, String password, String email) {
         this.login = login;
         this.password = password;
         this.email = email;
@@ -30,6 +30,7 @@ public class UserProfile {
         return login;
     }
 
+    @JsonSetter
     public void setLogin(String login) {
         this.login = login;
     }
@@ -39,6 +40,7 @@ public class UserProfile {
         return password;
     }
 
+    @JsonSetter
     public void setPassword(String password) {
         this.password = password;
     }
@@ -48,6 +50,7 @@ public class UserProfile {
         return email;
     }
 
+    @JsonSetter
     public void setEmail(String email) {
         this.email = email;
     }
