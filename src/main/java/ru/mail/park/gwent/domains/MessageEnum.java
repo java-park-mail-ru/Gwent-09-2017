@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.controllers.messages;
+package ru.mail.park.gwent.domains;
 
 public enum MessageEnum {
     SIGNED_UP("User signed up"),

@@ -1,15 +1,13 @@
-package ru.mail.park.gwent.controllers.messages;
+package ru.mail.park.gwent.domains;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 
 public class Message {
+    @JsonProperty("message")
     private String message;
 
     @JsonCreator
-    public Message(@JsonProperty("message") String message) {
+    public Message(String message) {
         this.message = message;
     }
 

@@ -7,12 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.mail.park.gwent.domains.UserInfo;
 import ru.mail.park.gwent.domains.UserProfile;
-import ru.mail.park.gwent.controllers.messages.Message;
+import ru.mail.park.gwent.domains.Message;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
 
-import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
+import static ru.mail.park.gwent.domains.MessageEnum.*;
 
 @RestController
 public class SessionController {
