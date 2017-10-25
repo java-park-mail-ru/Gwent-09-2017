@@ -12,14 +12,13 @@
 
 ## Описание API
 
-Описание API приводится в виде страниц на [Wiki](https://github.com/java-park-mail-ru/Gwent-09-2017/wiki)
+#### Версия 0.1.1
 
-* [Пользователь](https://github.com/java-park-mail-ru/Gwent-09-2017/wiki/User) - регистрация, модификация данных.
-* [Авторизация](https://github.com/java-park-mail-ru/Gwent-09-2017/wiki/Auth) - авторизация, выход из игры, получение данных о пользователе.
+Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/TechnoGwentAPI/0.1.1)
 
 ## Deploy
 
-API к игре развернуто на хостинге: <https://technogwent-api.herokuapp.com>
+API к игре развернуто на хостинге: <https://technogwent-api-011.herokuapp.com>
 
 ## Frontend
 
@@ -32,14 +31,12 @@ API к игре развернуто на хостинге: <https://technogwent
 **Гулый Константин**
 
 * <https://github.com/kgulyy>
-* <https://t.me/kgulyy>
 
 ### Frontend
 
 **Вероника Персиянова**
 
 * <https://github.com/vpersiyanova>
-* <https://t.me/vpersiyanova>
 
 **Павел Хотин**
 
@@ -50,13 +47,11 @@ API к игре развернуто на хостинге: <https://technogwent
 **Валерий Зубаиров**
 
 * <https://github.com/ZubairovValeriy>
-* <https://t.me/ValeriyZubairov>
 
 ### Mentor
 
 **Александр Орел**
 
-* <https://t.me/orel_alexandr>
 * <https://github.com/aorel>
 
 ## Лицензия

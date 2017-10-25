@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.controllers.messages;
+package ru.mail.park.gwent.domains;
 
 public enum MessageEnum {
     SIGNED_UP("User signed up"),
@@ -10,9 +10,7 @@ public enum MessageEnum {
     LOGGED_OUT("User logged out"),
     NOT_AUTHORIZED("User not authorized"),
     ALREADY_AUTHORIZED("User is already authorized"),
-    ANOTHER_ALREADY_AUTHORIZED("Another user is already authorized, try to logout and login again"),
-    USER_PROFILE_UPDATED ("User profile data updated"),
-    LOGIN_IS_NOT_THE_SAME("Login is not the same. You can not modify login. You have to specify your login.");
+    ANOTHER_ALREADY_AUTHORIZED("Another user is already authorized, try to logout and login again");
 
     private Message message;
 

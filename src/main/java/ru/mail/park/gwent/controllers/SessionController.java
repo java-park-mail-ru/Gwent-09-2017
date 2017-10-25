@@ -1,37 +1,44 @@
 package ru.mail.park.gwent.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import ru.mail.park.gwent.account.AccountService;
-import ru.mail.park.gwent.account.UserProfile;
-import ru.mail.park.gwent.controllers.messages.Message;
+import ru.mail.park.gwent.domains.Message;
+import ru.mail.park.gwent.domains.UserInfo;
+import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
 
-import static ru.mail.park.gwent.controllers.messages.MessageEnum.*;
+import static ru.mail.park.gwent.domains.MessageEnum.*;
 
-@CrossOrigin(origins = "https://testgwent.herokuapp.com")
 @RestController
+@RequestMapping("/api/auth")
 public class SessionController {
-    private final AccountService accountService;
+    private final UserService userService;
+    private final PasswordEncoder encoder;
 
-    public SessionController(AccountService accountService) {
-        this.accountService = accountService;
+    @Autowired
+    SessionController(UserService userService, PasswordEncoder encoder) {
+        this.userService = userService;
+        this.encoder = encoder;
     }
 
-    @GetMapping("/api/auth")
+    @GetMapping
     public ResponseEntity getLoggedUserProfile(HttpSession session) {
         final String sessionId = session.getId();
-        final UserProfile findedUserBySessionId = accountService.getUserBySessionId(sessionId);
-        if (findedUserBySessionId == null) {
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         } else {
-            return ResponseEntity.ok(findedUserBySessionId);
+            final UserInfo userInfo = new UserInfo(foundUserBySession.getLogin(), foundUserBySession.getEmail());
+            return ResponseEntity.ok(userInfo);
         }
     }
 
-    @PostMapping("/api/auth")
+    @PostMapping
     public ResponseEntity<Message> signIn(@RequestBody(required = false) UserProfile profile, HttpSession session) {
         if (profile == null || profile.getLogin() == null || profile.getPassword() == null) {
             return ResponseEntity.badRequest().body(NO_LOGIN_OR_PASSWORD.getMessage());
@@ -41,15 +48,15 @@ public class SessionController {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile findedUserByLogin = accountService.getUserByLogin(profile.getLogin());
-        if (findedUserByLogin == null) {
+        final UserProfile foundUserByLogin = userService.getUserByLogin(profile.getLogin());
+        if (foundUserByLogin == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
         final String sessionId = session.getId();
-        final UserProfile findedUserBySessionId = accountService.getUserBySessionId(sessionId);
-        if (findedUserBySessionId != null) {
-            if (findedUserBySessionId.equals(findedUserByLogin)) {
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        if (foundUserBySession != null) {
+            if (foundUserBySession.equals(foundUserByLogin)) {
                 // пользователь авторизован и пытается авторизоваться под своим именем еще раз
                 return ResponseEntity.ok().body(ALREADY_AUTHORIZED.getMessage());
             } else {
@@ -58,24 +65,24 @@ public class SessionController {
             }
         }
 
-        if (!findedUserByLogin.getPassword().equals(profile.getPassword())) {
+        if (!encoder.matches(profile.getPassword(), foundUserByLogin.getPassword())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        accountService.addSession(sessionId, findedUserByLogin);
+        session.setAttribute(sessionId, foundUserByLogin);
         return ResponseEntity.ok().body(AUTHORIZED.getMessage());
     }
 
-    @DeleteMapping("/api/auth")
+    @DeleteMapping
     public ResponseEntity<Message> signOut(HttpSession session) {
         final String sessionId = session.getId();
-        final UserProfile findedUserBySessionId = accountService.getUserBySessionId(sessionId);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
 
-        if (findedUserBySessionId == null) {
+        if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
 
-        accountService.deleteSession(sessionId);
+        session.removeAttribute(sessionId);
         return ResponseEntity.ok().body(LOGGED_OUT.getMessage());
     }
 }

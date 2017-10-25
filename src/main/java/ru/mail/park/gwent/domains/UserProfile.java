@@ -1,11 +1,22 @@
-package ru.mail.park.gwent.account;
+package ru.mail.park.gwent.domains;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class UserProfile {
+    @Id
     private String login;
     private String password;
     private String email;
+
+    public UserProfile() {
+    }
 
     @JsonCreator
     public UserProfile(
@@ -17,19 +28,28 @@ public class UserProfile {
         this.email = email;
     }
 
-    @JsonGetter
     public String getLogin() {
         return login;
     }
 
-    @JsonGetter
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public String getPassword() {
         return password;
     }
 
-    @JsonGetter
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -41,9 +61,9 @@ public class UserProfile {
             return false;
         }
 
-        final UserProfile userProfile = (UserProfile) obj;
+        final UserProfile user = (UserProfile) obj;
 
-        return login.equals(userProfile.login);
+        return login.equals(user.login);
     }
 
     @Override
