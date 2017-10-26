@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class Application {
-    private static final String ORIGIN = "https://gwentteam.herokuapp.com";
+    private static final String ORIGIN = "https://gwent-front.herokuapp.com";
     private static final String LOCALHOST = "http://localhost:8000";
 
     public static void main(String[] args) {
