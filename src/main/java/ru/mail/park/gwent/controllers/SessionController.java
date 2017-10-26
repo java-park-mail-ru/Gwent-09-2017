@@ -17,6 +17,8 @@ import static ru.mail.park.gwent.domains.MessageEnum.*;
 @RestController
 @RequestMapping("/api/auth")
 public class SessionController {
+    private static final String SESSION_KEY = "UserProfile";
+
     private final UserService userService;
     private final PasswordEncoder encoder;
 
@@ -28,8 +30,7 @@ public class SessionController {
 
     @GetMapping
     public ResponseEntity getLoggedUserProfile(HttpSession session) {
-        final String sessionId = session.getId();
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_KEY);
         if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         } else {
@@ -53,8 +54,7 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final String sessionId = session.getId();
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_KEY);
         if (foundUserBySession != null) {
             if (foundUserBySession.equals(foundUserByLogin)) {
                 // пользователь авторизован и пытается авторизоваться под своим именем еще раз
@@ -69,20 +69,21 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        session.setAttribute(sessionId, foundUserByLogin);
+        session.setAttribute(SESSION_KEY, foundUserByLogin);
         return ResponseEntity.ok().body(AUTHORIZED.getMessage());
     }
 
     @DeleteMapping
     public ResponseEntity<Message> signOut(HttpSession session) {
-        final String sessionId = session.getId();
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_KEY);
 
         if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
 
-        session.removeAttribute(sessionId);
+        session.removeAttribute(SESSION_KEY);
+        session.invalidate();
+
         return ResponseEntity.ok().body(LOGGED_OUT.getMessage());
     }
 }
