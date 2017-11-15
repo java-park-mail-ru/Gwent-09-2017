@@ -17,7 +17,7 @@ import static ru.mail.park.gwent.domains.MessageEnum.*;
 @RestController
 @RequestMapping("/api/auth")
 public class SessionController {
-    private static final String SESSION_KEY = "UserProfile";
+    public static final String SESSION_KEY = "UserProfile";
 
     private final UserService userService;
     private final PasswordEncoder encoder;
