@@ -5,13 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 public class Application {
-    private static final String ORIGIN = "https://gwent-front.herokuapp.com";
-    private static final String LOCALHOST = "http://localhost:8000";
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -20,26 +16,5 @@ public class Application {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebCorsConfig();
-    }
-
-    private static class WebCorsConfig implements WebMvcConfigurer {
-        @Override
-        public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/api/join")
-                    .allowedOrigins(ORIGIN, LOCALHOST);
-
-            registry.addMapping("/api/user")
-                    .allowedOrigins(ORIGIN, LOCALHOST)
-                    .allowedMethods("PUT");
-
-            registry.addMapping("/api/auth")
-                    .allowedOrigins(ORIGIN, LOCALHOST)
-                    .allowedMethods("GET", "POST", "DELETE");
-        }
     }
 }
