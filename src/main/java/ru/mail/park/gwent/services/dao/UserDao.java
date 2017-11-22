@@ -43,4 +43,9 @@ public class UserDao implements UserService {
     public UserProfile updateUser(UserProfile profile) {
         return em.merge(profile);
     }
+
+    @Override
+    public boolean isExist(UserProfile profile) {
+        return em.contains(profile);
+    }
 }

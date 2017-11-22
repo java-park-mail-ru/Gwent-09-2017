@@ -93,4 +93,23 @@ public class UserDaoTest {
         assertEquals(UPDATED_PASSWORD, updatedUser.getPassword());
         assertEquals(UPDATED_EMAIL, updatedUser.getEmail());
     }
+
+    @Test
+    public void isNotExistUser() {
+        final UserProfile user = new UserProfile(LOGIN, PASSWORD, EMAIL);
+
+        final boolean isExist = userService.isExist(user);
+
+        assertFalse(isExist);
+    }
+
+    @Test
+    public void isExistUser() {
+        final UserProfile user = new UserProfile(LOGIN, PASSWORD, EMAIL);
+        userService.createUser(user);
+
+        final boolean isExist = userService.isExist(user);
+
+        assertTrue(isExist);
+    }
 }

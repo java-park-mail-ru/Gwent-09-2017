@@ -10,4 +10,6 @@ public interface UserService {
     UserProfile getUserByLogin(String login);
 
     UserProfile updateUser(UserProfile profile);
+
+    boolean isExist(UserProfile profile);
 }
