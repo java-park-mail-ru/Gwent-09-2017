@@ -12,12 +12,13 @@ import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
 
+import static ru.mail.park.gwent.consts.Constants.AUTH_URL;
+import static ru.mail.park.gwent.consts.Constants.SESSION_USER_PROFILE_KEY;
 import static ru.mail.park.gwent.domains.MessageEnum.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(AUTH_URL)
 public class SessionController {
-    public static final String SESSION_KEY = "UserProfile";
 
     private final UserService userService;
     private final PasswordEncoder encoder;
@@ -30,7 +31,7 @@ public class SessionController {
 
     @GetMapping
     public ResponseEntity getLoggedUserProfile(HttpSession session) {
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_KEY);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_USER_PROFILE_KEY);
         if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         } else {
@@ -54,7 +55,7 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_KEY);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_USER_PROFILE_KEY);
         if (foundUserBySession != null) {
             if (foundUserBySession.equals(foundUserByLogin)) {
                 // пользователь авторизован и пытается авторизоваться под своим именем еще раз
@@ -69,19 +70,19 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        session.setAttribute(SESSION_KEY, foundUserByLogin);
+        session.setAttribute(SESSION_USER_PROFILE_KEY, foundUserByLogin);
         return ResponseEntity.ok().body(AUTHORIZED.getMessage());
     }
 
     @DeleteMapping
     public ResponseEntity<Message> signOut(HttpSession session) {
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_KEY);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_USER_PROFILE_KEY);
 
         if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
 
-        session.removeAttribute(SESSION_KEY);
+        session.removeAttribute(SESSION_USER_PROFILE_KEY);
         session.invalidate();
 
         return ResponseEntity.ok().body(LOGGED_OUT.getMessage());

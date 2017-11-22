@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static ru.mail.park.gwent.consts.Constants.SIGN_UP_URL;
 import static ru.mail.park.gwent.domains.MessageEnum.*;
 
 /**
@@ -36,10 +37,11 @@ public class UserControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static final String SIGN_UP_URL = "/api/join";
     private static final String LOGIN = "login";
     private static final String EMAIL = "email@email.ru";
     private static final String PASSWORD = "password";
+    private static final String EMPTY_LOGIN = "";
+    private static final String EMPTY_PASSWORD = "";
 
     @Test
     public void testSignUpEmptyBody() {
@@ -55,7 +57,7 @@ public class UserControllerTest {
 
     @Test
     public void testSignUpEmptyLoginAndPassword() {
-        final UserProfile user = new UserProfile("", "", null);
+        final UserProfile user = new UserProfile(EMPTY_LOGIN, EMPTY_PASSWORD, null);
 
         final ResponseEntity<Message> response = restTemplate.postForEntity(SIGN_UP_URL, user, Message.class);
 

@@ -2,6 +2,7 @@ package ru.mail.park.gwent.domains;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ public class UserProfile {
     public UserProfile(
             @JsonProperty("login") String login,
             @JsonProperty("password") String password,
-            @JsonProperty("email") String email) {
+            @Nullable @JsonProperty("email") String email) {
         this.login = login;
         this.password = password;
         this.email = email;

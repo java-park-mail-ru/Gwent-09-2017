@@ -11,6 +11,7 @@ import ru.mail.park.gwent.domains.Message;
 import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
+import static ru.mail.park.gwent.consts.Constants.SIGN_UP_URL;
 import static ru.mail.park.gwent.domains.MessageEnum.*;
 
 @RestController
@@ -24,7 +25,7 @@ public class UserController {
         this.encoder = encoder;
     }
 
-    @PostMapping("/api/join")
+    @PostMapping(SIGN_UP_URL)
     public ResponseEntity<Message> signUp(@RequestBody(required = false) UserProfile newProfile) {
         if (newProfile == null || newProfile.getLogin() == null || newProfile.getPassword() == null) {
             return ResponseEntity.badRequest().body(NO_LOGIN_OR_PASSWORD.getMessage());

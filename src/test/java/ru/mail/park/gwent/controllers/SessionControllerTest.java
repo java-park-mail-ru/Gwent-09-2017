@@ -24,6 +24,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static ru.mail.park.gwent.consts.Constants.AUTH_URL;
+import static ru.mail.park.gwent.consts.Constants.LOCALHOST;
 import static ru.mail.park.gwent.domains.MessageEnum.*;
 
 /**
@@ -39,16 +41,17 @@ public class SessionControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static final String AUTH_URL = "/api/auth";
     private static final String LOGIN = "login";
     private static final String EMAIL = "email@email.ru";
     private static final String PASSWORD = "password";
+    private static final String EMPTY_LOGIN = "";
+    private static final String EMPTY_PASSWORD = "";
     private static final String WRONG_PASSWORD = "wrong-password";
 
     private HttpHeaders setUpHttpHeaders() {
         final HttpHeaders headers = new HttpHeaders();
 
-        final List<String> origin = Collections.singletonList("http://localhost:8000");
+        final List<String> origin = Collections.singletonList(LOCALHOST);
         headers.put(HttpHeaders.ORIGIN, origin);
         final List<String> contentType = Collections.singletonList("application/json");
         headers.put(HttpHeaders.CONTENT_TYPE, contentType);
@@ -77,7 +80,7 @@ public class SessionControllerTest {
 
     @Test
     public void testSignInEmptyLoginAndPassword() {
-        final UserProfile user = new UserProfile("", "", null);
+        final UserProfile user = new UserProfile(EMPTY_LOGIN, EMPTY_PASSWORD, null);
 
         final ResponseEntity<Message> response = restTemplate.postForEntity(AUTH_URL, user, Message.class);
 
