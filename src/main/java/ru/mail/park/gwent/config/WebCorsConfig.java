@@ -10,7 +10,7 @@ import static ru.mail.park.gwent.consts.Constants.*;
 public class WebCorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping(AUTH_URL)
+        registry.addMapping(SIGN_UP_URL)
                 .allowedOrigins(ORIGIN, LOCALHOST);
 
         registry.addMapping(AUTH_URL)
