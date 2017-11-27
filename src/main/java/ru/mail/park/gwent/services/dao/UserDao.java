@@ -46,6 +46,8 @@ public class UserDao implements UserService {
 
     @Override
     public boolean isExist(UserProfile profile) {
-        return em.contains(profile);
+        final UserProfile user = getUserByLogin(profile.getLogin());
+
+        return user != null;
     }
 }
