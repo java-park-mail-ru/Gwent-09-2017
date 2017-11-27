@@ -12,6 +12,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+import ru.mail.park.gwent.consts.Constants;
 import ru.mail.park.gwent.domains.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
@@ -56,8 +57,14 @@ public class GameSocketHandler extends TextWebSocketHandler {
             closeSessionSilently(session, ACCESS_DENIED);
             return;
         }
+
+        WebSocketUser webSocketUser = (WebSocketUser) session.getAttributes().get(Constants.SESSION_WEB_SOCKET_USER_KEY);
+        if (webSocketUser == null) {
+            webSocketUser = new WebSocketUser(session, profile);
+            session.getAttributes().put(Constants.SESSION_WEB_SOCKET_USER_KEY, webSocketUser);
+        }
         try {
-            handleMessage(new WebSocketUser(session, profile), message);
+            handleMessage(webSocketUser, message);
         } catch (HandleException e) {
             session.sendMessage(new TextMessage(exceptionToJson(e)));
         }
