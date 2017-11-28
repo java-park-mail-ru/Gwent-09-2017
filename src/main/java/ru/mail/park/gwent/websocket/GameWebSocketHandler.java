@@ -41,6 +41,8 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         if (profile == null || !userService.isExist(profile)) {
             LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
             closeSessionSilently(session);
+        } else {
+            LOGGER.info("User " + profile.getLogin() + " connected");
         }
     }
 
@@ -120,6 +122,8 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         final UserProfile profile = (UserProfile) session.getAttributes().get(SESSION_USER_PROFILE_KEY);
         if (profile == null) {
             LOGGER.warn("User disconnected but his session was not found (closeStatus=" + status + ')');
+        } else {
+            LOGGER.info("User " + profile.getLogin() + " disconnected");
         }
     }
 }

@@ -1,9 +1,9 @@
 package ru.mail.park.gwent.websocket;
 
 public enum ClientState {
-    INIT(1),
-    WAITING_PLAYER(2),
-    READY(10);
+    INIT(0),
+    WAITING_PLAYER(1),
+    READY(2);
 
     private int id;
 

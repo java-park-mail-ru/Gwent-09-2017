@@ -1,20 +1,13 @@
 package ru.mail.park.gwent.websocket;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class WantPlayMessage extends WebSocketMessage {
-    private String type;
-    private int state;
+    private ClientState state;
 
-    public WantPlayMessage(@JsonProperty("type") String type) {
-        this.type = type;
+    public WantPlayMessage() {
+        state = ClientState.INIT;
     }
 
-    public int getState() {
+    public ClientState getState() {
         return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
     }
 }

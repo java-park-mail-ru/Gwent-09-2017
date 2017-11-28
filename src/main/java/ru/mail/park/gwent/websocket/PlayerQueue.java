@@ -10,7 +10,7 @@ public class PlayerQueue {
     private ConcurrentLinkedQueue<WebSocketUser> userQueue = new ConcurrentLinkedQueue<>();
 
     @Nullable
-    public Lobby addUser(WebSocketUser user) throws HandleException {
+    public UserPair addUser(WebSocketUser user) throws HandleException {
         if (!user.getSession().isOpen()) {
             throw new HandleException("Can't pair user with close session");
         }
@@ -34,6 +34,6 @@ public class PlayerQueue {
             return null;
         }
 
-        return new Lobby(user, waitingUser);
+        return new UserPair(user, waitingUser);
     }
 }

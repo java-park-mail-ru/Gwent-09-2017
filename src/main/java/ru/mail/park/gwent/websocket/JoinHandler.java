@@ -12,19 +12,19 @@ import java.io.IOException;
 public class JoinHandler extends SocketMessageHandler<WantPlayMessage> {
     private static final Logger LOGGER = LoggerFactory.getLogger(JoinHandler.class);
 
-    private LobbyService lobbyService;
+    private UserPairService userPairService;
     private ObjectMapper objectMapper;
 
-    public JoinHandler(LobbyService lobbyService, ObjectMapper objectMapper) {
+    public JoinHandler(UserPairService userPairService, ObjectMapper objectMapper) {
         super(WantPlayMessage.class);
-        this.lobbyService = lobbyService;
+        this.userPairService = userPairService;
         this.objectMapper = objectMapper;
     }
 
     @Override
     public void handle(@NotNull WantPlayMessage message, @NotNull WebSocketUser forUser) throws HandleException {
-        if (message.getState() == ClientState.INIT.getId()) {
-            final WebSocketMessage outputMsg = lobbyService.onInitUser(forUser);
+        if (message.getState() == ClientState.INIT) {
+            final WebSocketMessage outputMsg = userPairService.onInitUser(forUser);
             if (outputMsg != null) {
                 try {
                     forUser.sendToUser(outputMsg, objectMapper);

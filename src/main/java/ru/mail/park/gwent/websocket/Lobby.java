@@ -1,21 +1,17 @@
 package ru.mail.park.gwent.websocket;
 
-import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Lobby {
-    private WebSocketUser firstUser;
-    private WebSocketUser secondUser;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Lobby.class);
 
-    public Lobby(WebSocketUser firstUser, @Nullable WebSocketUser secondUser) {
-        this.firstUser = firstUser;
-        this.secondUser = secondUser;
-    }
+    private final int id;
+    private final UserPair users;
 
-    public WebSocketUser getFirstUser() {
-        return firstUser;
-    }
-
-    public WebSocketUser getSecondUser() {
-        return secondUser;
+    public Lobby(int id, UserPair users) {
+        this.id = id;
+        this.users = users;
+        LOGGER.info("Lobby id=" + id + " created");
     }
 }
