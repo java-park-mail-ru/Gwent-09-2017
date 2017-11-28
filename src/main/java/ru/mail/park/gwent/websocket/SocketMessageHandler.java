@@ -9,12 +9,11 @@ public abstract class SocketMessageHandler<T extends WebSocketMessage> {
         this.clazz = clazz;
     }
 
-    @SuppressWarnings("OverlyBroadCatchBlock")
     public void handleMessage(@NotNull WebSocketMessage message, @NotNull WebSocketUser user) throws HandleException {
         try {
             handle(clazz.cast(message), user);
         } catch (ClassCastException e) {
-            throw new HandleException("Can't read incoming webSocketMessage of type " + message.getClass(), e);
+            throw new HandleException("Can't read incoming message of type " + message.getClass(), e);
         }
     }
 

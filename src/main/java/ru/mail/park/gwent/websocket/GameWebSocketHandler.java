@@ -3,7 +3,6 @@ package ru.mail.park.gwent.websocket;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -18,7 +17,6 @@ import ru.mail.park.gwent.services.UserService;
 
 import java.io.IOException;
 
-import static org.springframework.web.socket.CloseStatus.SERVER_ERROR;
 import static ru.mail.park.gwent.consts.Constants.SESSION_USER_PROFILE_KEY;
 
 public class GameWebSocketHandler extends TextWebSocketHandler {
@@ -42,7 +40,7 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         final UserProfile profile = (UserProfile) session.getAttributes().get(SESSION_USER_PROFILE_KEY);
         if (profile == null || !userService.isExist(profile)) {
             LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
-            closeSessionSilently(session, ACCESS_DENIED);
+            closeSessionSilently(session);
         }
     }
 
@@ -54,7 +52,7 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         final UserProfile profile = (UserProfile) session.getAttributes().get(SESSION_USER_PROFILE_KEY);
         if (profile == null || !userService.isExist(profile)) {
             LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
-            closeSessionSilently(session, ACCESS_DENIED);
+            closeSessionSilently(session);
             return;
         }
 
@@ -70,14 +68,9 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-    private void closeSessionSilently(@NotNull WebSocketSession session, @Nullable CloseStatus closeStatus) {
-        CloseStatus status = closeStatus;
-        if (status == null) {
-            status = SERVER_ERROR;
-        }
-
+    private void closeSessionSilently(@NotNull WebSocketSession session) {
         try {
-            session.close(status);
+            session.close(ACCESS_DENIED);
         } catch (IOException e) {
             LOGGER.error("Can't close WebSocketSession", e);
         }
