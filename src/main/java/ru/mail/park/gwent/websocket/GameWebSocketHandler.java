@@ -21,17 +21,17 @@ import java.io.IOException;
 import static org.springframework.web.socket.CloseStatus.SERVER_ERROR;
 import static ru.mail.park.gwent.consts.Constants.SESSION_USER_PROFILE_KEY;
 
-public class GameSocketHandler extends TextWebSocketHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(GameSocketHandler.class);
+public class GameWebSocketHandler extends TextWebSocketHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(GameWebSocketHandler.class);
     private static final CloseStatus ACCESS_DENIED = new CloseStatus(4500, "Not logged in. Access denied");
 
     private SocketMessageHandlerManager handlerManager;
     private UserService userService;
     private ObjectMapper objectMapper;
 
-    public GameSocketHandler(@NotNull SocketMessageHandlerManager handlerManager,
-                             @NotNull UserService userService,
-                             ObjectMapper objectMapper) {
+    public GameWebSocketHandler(@NotNull SocketMessageHandlerManager handlerManager,
+                                @NotNull UserService userService,
+                                ObjectMapper objectMapper) {
         this.handlerManager = handlerManager;
         this.userService = userService;
         this.objectMapper = objectMapper;

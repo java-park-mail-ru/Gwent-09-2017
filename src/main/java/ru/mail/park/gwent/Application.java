@@ -7,7 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.handler.PerConnectionWebSocketHandler;
-import ru.mail.park.gwent.websocket.GameSocketHandler;
+import ru.mail.park.gwent.websocket.GameWebSocketHandler;
 
 @SpringBootApplication
 public class Application {
@@ -18,7 +18,7 @@ public class Application {
 
     @Bean
     public WebSocketHandler gameWebSocketHandler() {
-        return new PerConnectionWebSocketHandler(GameSocketHandler.class);
+        return new PerConnectionWebSocketHandler(GameWebSocketHandler.class);
     }
 
     @Bean
