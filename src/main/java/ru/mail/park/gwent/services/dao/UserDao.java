@@ -2,9 +2,8 @@ package ru.mail.park.gwent.services.dao;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
-import ru.mail.park.gwent.services.exceptions.DuplicateUserException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;

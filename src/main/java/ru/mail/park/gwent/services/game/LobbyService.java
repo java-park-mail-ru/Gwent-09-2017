@@ -1,6 +1,8 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.services.game;
 
 import org.springframework.stereotype.Service;
+import ru.mail.park.gwent.domains.game.Lobby;
+import ru.mail.park.gwent.domains.game.UserPair;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

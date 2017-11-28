@@ -1,16 +1,19 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.services.game;
 
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
+import ru.mail.park.gwent.domains.game.UserPair;
+import ru.mail.park.gwent.domains.game.WebSocketUser;
+import ru.mail.park.gwent.websocket.handler.HandleException;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @Service
-public class PlayerQueue {
+public class PlayerQueueService {
     private ConcurrentLinkedQueue<WebSocketUser> userQueue = new ConcurrentLinkedQueue<>();
 
     @Nullable
-    public UserPair addUser(WebSocketUser user) throws HandleException {
+    public UserPair joinUser(WebSocketUser user) throws HandleException {
         if (!user.getSession().isOpen()) {
             throw new HandleException("Can't pair user with close session");
         }

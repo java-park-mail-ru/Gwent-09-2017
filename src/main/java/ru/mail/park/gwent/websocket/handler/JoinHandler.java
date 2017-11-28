@@ -1,10 +1,15 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.websocket.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import ru.mail.park.gwent.domains.game.WebSocketUser;
+import ru.mail.park.gwent.services.game.UserPairService;
+import ru.mail.park.gwent.websocket.message.ClientState;
+import ru.mail.park.gwent.websocket.message.WantPlayMessage;
+import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 import java.io.IOException;
 

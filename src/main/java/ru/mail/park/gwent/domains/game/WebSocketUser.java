@@ -1,9 +1,10 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.domains.game;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 import java.io.IOException;
 

@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
-import ru.mail.park.gwent.services.exceptions.DuplicateUserException;
 
 import static org.junit.Assert.*;
 

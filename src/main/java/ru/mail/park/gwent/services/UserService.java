@@ -1,6 +1,6 @@
 package ru.mail.park.gwent.services;
 
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.UserProfile;
 
 public interface UserService {
     UserProfile createUser(UserProfile profile);

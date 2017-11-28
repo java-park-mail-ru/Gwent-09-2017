@@ -5,16 +5,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import ru.mail.park.gwent.domains.Message;
-import ru.mail.park.gwent.domains.UserInfo;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.Message;
+import ru.mail.park.gwent.domains.auth.UserInfo;
+import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
 
 import static ru.mail.park.gwent.consts.Constants.AUTH_URL;
 import static ru.mail.park.gwent.consts.Constants.SESSION_USER_PROFILE_KEY;
-import static ru.mail.park.gwent.domains.MessageEnum.*;
+import static ru.mail.park.gwent.domains.auth.MessageEnum.*;
 
 @RestController
 @RequestMapping(AUTH_URL)

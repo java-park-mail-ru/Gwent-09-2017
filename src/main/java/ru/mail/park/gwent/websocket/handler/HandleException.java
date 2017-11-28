@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.websocket.handler;
 
 public class HandleException extends Exception {
     public HandleException(String message, Throwable cause) {

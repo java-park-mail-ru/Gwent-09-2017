@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.domains.game;
 
 import org.jetbrains.annotations.Nullable;
 

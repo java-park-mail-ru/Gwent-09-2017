@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.domains;
+package ru.mail.park.gwent.domains.auth;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,9 +1,12 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.websocket.handler;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.mail.park.gwent.domains.game.WebSocketUser;
+import ru.mail.park.gwent.websocket.message.WantPlayMessage;
+import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 import java.util.HashMap;
 import java.util.Map;

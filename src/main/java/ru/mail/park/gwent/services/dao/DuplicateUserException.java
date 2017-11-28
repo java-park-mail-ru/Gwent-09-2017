@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.services.exceptions;
+package ru.mail.park.gwent.services.dao;
 
 public class DuplicateUserException extends RuntimeException {
     public DuplicateUserException(String login, Throwable cause) {

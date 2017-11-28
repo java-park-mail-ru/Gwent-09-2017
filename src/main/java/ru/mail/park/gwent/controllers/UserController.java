@@ -7,12 +7,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mail.park.gwent.domains.Message;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.Message;
+import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
 import static ru.mail.park.gwent.consts.Constants.SIGN_UP_URL;
-import static ru.mail.park.gwent.domains.MessageEnum.*;
+import static ru.mail.park.gwent.domains.auth.MessageEnum.*;
 
 @RestController
 public class UserController {

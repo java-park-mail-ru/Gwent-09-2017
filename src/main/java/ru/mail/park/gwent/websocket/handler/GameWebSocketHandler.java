@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.websocket.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,8 +12,11 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import ru.mail.park.gwent.consts.Constants;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.domains.game.WebSocketUser;
 import ru.mail.park.gwent.services.UserService;
+import ru.mail.park.gwent.websocket.message.ExceptionMessage;
+import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 import java.io.IOException;
 

@@ -1,6 +1,8 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.websocket.handler;
 
 import org.jetbrains.annotations.NotNull;
+import ru.mail.park.gwent.domains.game.WebSocketUser;
+import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 public abstract class SocketMessageHandler<T extends WebSocketMessage> {
     private final Class<T> clazz;

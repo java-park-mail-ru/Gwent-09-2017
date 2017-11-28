@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.websocket;
+package ru.mail.park.gwent.websocket.message;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
