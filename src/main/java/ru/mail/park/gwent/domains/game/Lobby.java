@@ -8,10 +8,12 @@ public class Lobby {
 
     private final int id;
     private final UserPair users;
+    private final PlayField playField;
 
     public Lobby(int id, UserPair users) {
         this.id = id;
         this.users = users;
+        playField = new PlayField();
         LOGGER.info("Lobby id=" + id + " created");
     }
 }
