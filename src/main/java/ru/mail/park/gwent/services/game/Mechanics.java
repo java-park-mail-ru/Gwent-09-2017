@@ -1,8 +1,6 @@
 package ru.mail.park.gwent.services.game;
 
-import ru.mail.park.gwent.domains.game.Card;
-import ru.mail.park.gwent.domains.game.CardType;
-import ru.mail.park.gwent.domains.game.Deck;
+import ru.mail.park.gwent.domains.game.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +9,20 @@ import java.util.List;
 public class Mechanics {
     private static final int NUMBER_OF_CARDS_ONE_TYPE = 8;
     private static final int NUMBER_OF_CARDS_IN_HAND = 10;
+
+    private PlayField playField;
+
+    public Mechanics() {
+        playField = new PlayField();
+    }
+
+    public void firstPlayerGo(Card card) {
+        final Deck hand = playField.getFirstPlayerHand();
+        final PlayerLines lines = playField.getFirstPlayerLines();
+        if (hand.hasCard(card)) {
+            lines.addCartToLine(card);
+        }
+    }
 
     public static Deck genarateDeck() {
         final List<Card> cards = new ArrayList<>();

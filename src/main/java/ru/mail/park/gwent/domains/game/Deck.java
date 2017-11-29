@@ -12,4 +12,8 @@ public class Deck {
     public List<Card> getCards() {
         return cards;
     }
+
+    public boolean hasCard(Card card) {
+        return cards.contains(card);
+    }
 }
