@@ -12,13 +12,13 @@
 
 ## Описание API
 
-#### Версия 0.1.1
+#### Версия 0.1.2
 
-Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/TechnoGwentAPI/0.1.1)
+Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/TechnoGwentAPI/0.1.2)
 
 ## Deploy
 
-API к игре развернуто на хостинге: <https://technogwent-api-011.herokuapp.com>
+API к игре развернуто на хостинге: <https://technogwent-api-012.herokuapp.com>
 
 ## Frontend
 
@@ -58,4 +58,4 @@ API к игре развернуто на хостинге: <https://technogwent
 
 Код реализован под [MIT License](LICENSE.md).
 
-Проект является учебным и [CD PROJEKT RED](http://en.cdprojektred.com/) не выступают в качестве партнера.
+Проект является учебным и [CD PROJEKT RED](http://en.cdprojektred.com) не выступают в качестве партнера.
