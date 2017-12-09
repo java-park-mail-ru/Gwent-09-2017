@@ -2,7 +2,7 @@ swagger: '2.0'
 info:
   title: TechnoGwent API
   description: API браузерной мультиплеерной карточной игры ТехноГвинт
-  version: "0.1.1"
+  version: "0.1.2"
   contact:
     email: kgulyy@my.com
   license:
@@ -10,7 +10,7 @@ info:
     url: https://github.com/java-park-mail-ru/Gwent-09-2017/blob/master/LICENSE.md
 schemes:
 - https
-host: 'technogwent-api-011.herokuapp.com'
+host: 'technogwent-api-012.herokuapp.com'
 basePath: /api
 consumes:
 - application/json
@@ -91,19 +91,25 @@ paths:
       summary: Получение авторизованного пользователя
       description: |
         Получение данных об авторизованном пользователе
-      operationId: getLoggedUserProfile
+      operationId: getLoggedUserInfo
       parameters:
       - name: Origin
         in: header
         description: Домен, с которого осуществлён запрос.
         required: true
         type: string
+      - name: hasPosition
+        in: query
+        description: |
+          Опция для вычисления текущей позиции пользователя в таблице рекордов.
+        type: boolean
+        default: false
       responses:
         200:
           description: |
             Данные авторизованного пользователя.
           schema:
-            $ref: '#/definitions/UserProfile'
+            $ref: '#/definitions/UserInfo'
         401:
           description: |
             Пользователь не авторизован.
@@ -131,9 +137,43 @@ paths:
             Пользователь не авторизован.
           schema:
             $ref: '#/definitions/Error'
+  /users:
+    get:
+      summary: Получение списка пользователей
+      description: |
+        Получение данных о пользователях, отсортированные по убыванию кол-ва побед и возрастанию логина
+      operationId: getUsersOnScoreBoard
+      parameters:
+      - name: Origin
+        in: header
+        description: Домен, с которого осуществлён запрос.
+        required: true
+        type: string
+      - name: limit
+        in: query
+        type: number
+        default: 10
+        minimum: 0
+        description: Максимальное кол-во возвращаемых записей.
+      - name: offset
+        in: query
+        type: number
+        default: 0
+        description: Позиция с которой возвращаются записи.
+      responses:
+        200:
+          description: |
+            Данные авторизованного пользователя.
+          schema:
+            $ref: '#/definitions/Users'
+        401:
+          description: |
+            Пользователь не авторизован.
+          schema:
+            $ref: '#/definitions/Error'
 definitions:
   UserProfile:
-    description: Информация о пользователе.
+    description: Профиль пользователя.
     type: object
     properties:
       login:
@@ -156,6 +196,36 @@ definitions:
     required:
     - login
     - password
+  UserInfo:
+    description: Информация о пользователе.
+    type: object
+    properties:
+      login:
+        type: string
+        format: identity
+        description: Имя пользователя (уникальное поле).
+        example: captain
+        x-isnullable: false
+      email:
+        type: string
+        format: email
+        description: Почтовый адрес пользователя.
+        example: captain@blackpearl.sea
+        x-isnullable: true
+      wins:
+        type: integer
+        description: Кол-во выигранных партий
+        example: 5
+        x-isnullable: false
+      position:
+        type: integer
+        description: Позиция в таблице лидеров
+        example: 8
+        x-isnullable: true
+  Users:
+    type: array
+    items:
+      $ref: '#/definitions/UserInfo'
   Message:
     type: object
     properties:
