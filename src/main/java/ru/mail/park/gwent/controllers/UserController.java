@@ -4,14 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.mail.park.gwent.domains.auth.Message;
+import ru.mail.park.gwent.domains.auth.UserInfo;
 import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static ru.mail.park.gwent.consts.Constants.SIGN_UP_URL;
+import static ru.mail.park.gwent.consts.Constants.USERS_URL;
 import static ru.mail.park.gwent.domains.auth.MessageEnum.*;
 
 @RestController
@@ -45,5 +48,20 @@ public class UserController {
         userService.createUser(newProfile);
 
         return ResponseEntity.ok().body(SIGNED_UP.getMessage());
+    }
+
+    @GetMapping(USERS_URL)
+    public ResponseEntity<List<UserInfo>> getUsersOnScoreBoard(
+            @RequestParam(required = false, defaultValue = "10") int limit,
+            @RequestParam(required = false, defaultValue = "0") int offset) {
+
+        final List<UserProfile> users = userService.getUsers(limit, offset);
+        final List<UserInfo> result = new ArrayList<>();
+
+        for (UserProfile profile : users) {
+            result.add(new UserInfo(profile));
+        }
+
+        return ResponseEntity.ok(result);
     }
 }

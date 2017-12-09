@@ -7,6 +7,7 @@ import ru.mail.park.gwent.services.UserService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import java.util.List;
 
 @Service
 @Transactional
@@ -48,5 +49,13 @@ public class UserDao implements UserService {
         final UserProfile user = getUserByLogin(profile.getLogin());
 
         return user != null;
+    }
+
+    @Override
+    public List<UserProfile> getUsers(int limit, int offset) {
+        return em.createQuery("SELECT p FROM UserProfile p ORDER BY p.wins DESC, p.login", UserProfile.class)
+                .setMaxResults(limit)
+                .setFirstResult(offset)
+                .getResultList();
     }
 }

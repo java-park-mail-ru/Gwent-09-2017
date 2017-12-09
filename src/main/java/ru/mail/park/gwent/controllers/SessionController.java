@@ -11,6 +11,7 @@ import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 import static ru.mail.park.gwent.consts.Constants.AUTH_URL;
 import static ru.mail.park.gwent.consts.Constants.SESSION_USER_PROFILE_KEY;
@@ -30,14 +31,23 @@ public class SessionController {
     }
 
     @GetMapping
-    public ResponseEntity getLoggedUserProfile(HttpSession session) {
+    public ResponseEntity<?> getLoggedUserInfo(
+            HttpSession session,
+            @RequestParam(required = false, defaultValue = "false") boolean hasPosition) {
         final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_USER_PROFILE_KEY);
         if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
-        } else {
-            final UserInfo userInfo = new UserInfo(foundUserBySession.getLogin(), foundUserBySession.getEmail());
+        }
+        if (hasPosition) {
+            final List<UserProfile> allUsers = userService.getUsers(Integer.MAX_VALUE, 0);
+            final int position = allUsers.indexOf(foundUserBySession);
+
+            final UserInfo userInfo = new UserInfo(foundUserBySession, position);
             return ResponseEntity.ok(userInfo);
         }
+
+        final UserInfo userInfo = new UserInfo(foundUserBySession);
+        return ResponseEntity.ok(userInfo);
     }
 
     @PostMapping

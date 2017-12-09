@@ -15,6 +15,7 @@ public class UserProfile {
     private String login;
     private String password;
     private String email;
+    private Integer wins;
 
     public UserProfile() {
     }
@@ -27,6 +28,7 @@ public class UserProfile {
         this.login = login;
         this.password = password;
         this.email = email;
+        wins = 0;
     }
 
     public String getLogin() {
@@ -51,6 +53,14 @@ public class UserProfile {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getWins() {
+        return wins;
+    }
+
+    public Integer addWin() {
+        return wins++;
     }
 
     @Override
