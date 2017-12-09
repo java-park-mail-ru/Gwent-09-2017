@@ -51,13 +51,17 @@ public class UserController {
     }
 
     @GetMapping(USERS_URL)
-    public ResponseEntity<List<UserInfo>> getUsersOnScoreBoard(
+    public ResponseEntity<?> getUsersOnScoreBoard(
             @RequestParam(required = false, defaultValue = "10") int limit,
             @RequestParam(required = false, defaultValue = "0") int offset) {
 
         final List<UserProfile> users = userService.getUsers(limit, offset);
-        final List<UserInfo> result = new ArrayList<>();
 
+        if (users.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        final List<UserInfo> result = new ArrayList<>();
         for (UserProfile profile : users) {
             result.add(new UserInfo(profile));
         }
