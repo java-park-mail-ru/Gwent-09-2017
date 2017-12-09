@@ -1,7 +1,9 @@
 package ru.mail.park.gwent.domains.auth;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;
 
 public class UserInfo {
@@ -9,6 +11,13 @@ public class UserInfo {
     private String email;
     private Integer wins;
     private Integer position;
+
+    @JsonCreator
+    public UserInfo(@JsonProperty("login") String login,
+                    @JsonProperty("email") String email) {
+        this.login = login;
+        this.email = email;
+    }
 
     public UserInfo(@NotNull UserProfile profile) {
         login = profile.getLogin();
@@ -31,7 +40,7 @@ public class UserInfo {
         return email;
     }
 
-    @JsonGetter
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public Integer getWins() {
         return wins;
     }
