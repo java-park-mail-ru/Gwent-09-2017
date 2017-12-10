@@ -10,7 +10,6 @@ import ru.mail.park.gwent.domains.auth.UserInfo;
 import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static ru.mail.park.gwent.consts.Constants.SIGN_UP_URL;
@@ -38,7 +37,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile foundUserByLogin = userService.getUserByLogin(newProfile.getLogin());
+        final UserProfile foundUserByLogin = userService.getUserProfile(newProfile.getLogin());
 
         if (foundUserByLogin != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(LOGIN_IS_ALREADY_TAKEN.getMessage());
@@ -53,19 +52,17 @@ public class UserController {
     @GetMapping(USERS_URL)
     public ResponseEntity<?> getUsersOnScoreBoard(
             @RequestParam(required = false, defaultValue = "10") int limit,
-            @RequestParam(required = false, defaultValue = "0") int offset) {
+            @RequestParam(required = false, defaultValue = "1") int offset) {
+        if (offset < 1) {
+            return ResponseEntity.badRequest().body(OFFSET_MUST_BE_OVER_THAN_ZERO.getMessage());
+        }
 
-        final List<UserProfile> users = userService.getUsers(limit, offset);
+        final List<UserInfo> users = userService.getUsers(limit, offset);
 
         if (users.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_LIST_IS_EMPTY.getMessage());
         }
 
-        final List<UserInfo> result = new ArrayList<>();
-        for (UserProfile profile : users) {
-            result.add(new UserInfo(profile));
-        }
-
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(users);
     }
 }

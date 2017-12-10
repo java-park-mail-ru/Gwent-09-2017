@@ -11,7 +11,6 @@ import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 import static ru.mail.park.gwent.consts.Constants.AUTH_URL;
 import static ru.mail.park.gwent.consts.Constants.SESSION_USER_PROFILE_KEY;
@@ -39,10 +38,7 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
         if (hasPosition) {
-            final List<UserProfile> allUsers = userService.getUsers(Integer.MAX_VALUE, 0);
-            final int position = allUsers.indexOf(foundUserBySession);
-
-            final UserInfo userInfo = new UserInfo(foundUserBySession, position);
+            final UserInfo userInfo = userService.getUserInfo(foundUserBySession.getLogin());
             return ResponseEntity.ok(userInfo);
         }
 
@@ -60,7 +56,7 @@ public class SessionController {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile foundUserByLogin = userService.getUserByLogin(profile.getLogin());
+        final UserProfile foundUserByLogin = userService.getUserProfile(profile.getLogin());
         if (foundUserByLogin == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }

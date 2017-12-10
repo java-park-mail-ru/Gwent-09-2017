@@ -63,7 +63,7 @@ public class UserDaoTest {
         final UserProfile createdUser = userService.createUser(user);
 
         userService.deleteUser(createdUser);
-        final UserProfile foundedUser = userService.getUserByLogin(createdUser.getLogin());
+        final UserProfile foundedUser = userService.getUserProfile(createdUser.getLogin());
 
         assertNull(foundedUser);
     }
@@ -73,7 +73,7 @@ public class UserDaoTest {
         final UserProfile user = new UserProfile(LOGIN, PASSWORD, EMAIL);
         final UserProfile createdUser = userService.createUser(user);
 
-        final UserProfile foundedUser = userService.getUserByLogin(createdUser.getLogin());
+        final UserProfile foundedUser = userService.getUserProfile(createdUser.getLogin());
 
         assertNotNull(foundedUser);
     }

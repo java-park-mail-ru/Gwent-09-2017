@@ -68,7 +68,7 @@ public class UserControllerTest {
     @Test
     public void testSignUpConflictUser() {
         final UserProfile emptyUser = new UserProfile();
-        when(userService.getUserByLogin(anyString())).thenReturn(emptyUser);
+        when(userService.getUserProfile(anyString())).thenReturn(emptyUser);
 
         final UserProfile newProfile = new UserProfile(LOGIN, PASSWORD, EMAIL);
 
@@ -76,7 +76,7 @@ public class UserControllerTest {
 
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
         assertEquals(LOGIN_IS_ALREADY_TAKEN.getMessage(), response.getBody());
-        verify(userService).getUserByLogin(anyString());
+        verify(userService).getUserProfile(anyString());
     }
 
     @Test
