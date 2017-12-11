@@ -9,4 +9,5 @@ public class Constants {
 
     public static final String ORIGIN = "https://gwent-front.herokuapp.com";
     public static final String LOCALHOST = "http://localhost:8000";
+    public static final String TECH_GWENT = "https://techgwent.herokuapp.com";
 }

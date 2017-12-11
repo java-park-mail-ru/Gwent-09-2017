@@ -11,14 +11,15 @@ public class WebCorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping(SIGN_UP_URL)
-                .allowedOrigins(ORIGIN, LOCALHOST);
+                .allowedOrigins(ORIGIN, LOCALHOST, TECH_GWENT)
+                .allowedMethods("POST");
 
         registry.addMapping(AUTH_URL)
-                .allowedOrigins(ORIGIN, LOCALHOST)
+                .allowedOrigins(ORIGIN, LOCALHOST, TECH_GWENT)
                 .allowedMethods("GET", "POST", "DELETE");
 
         registry.addMapping(USERS_URL)
-                .allowedOrigins(ORIGIN, LOCALHOST)
+                .allowedOrigins(ORIGIN, LOCALHOST, TECH_GWENT)
                 .allowedMethods("GET");
     }
 }
