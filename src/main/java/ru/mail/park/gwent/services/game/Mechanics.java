@@ -31,11 +31,11 @@ public class Mechanics {
             cards.add(card);
         }
         for (int i = 0; i < NUMBER_OF_CARDS_ONE_TYPE; i++) {
-            final Card card = new Card(i + 1, CardType.MIDDLE);
+            final Card card = new Card(i + 1, CardType.BACK);
             cards.add(card);
         }
         for (int i = 0; i < NUMBER_OF_CARDS_ONE_TYPE; i++) {
-            final Card card = new Card(i + 1, CardType.BACK);
+            final Card card = new Card(i + 1, CardType.BASIS);
             cards.add(card);
         }
 

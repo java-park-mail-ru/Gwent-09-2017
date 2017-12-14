@@ -4,14 +4,14 @@ public class PlayerLines {
     private int allPoints;
 
     private Line frontLine;
-    private Line middleLine;
     private Line backLine;
+    private Line basisLine;
 
     public PlayerLines() {
         allPoints = 0;
         frontLine = new Line(CardType.FRONT);
-        middleLine = new Line(CardType.MIDDLE);
         backLine = new Line(CardType.BACK);
+        basisLine = new Line(CardType.BASIS);
     }
 
     public int getAllPoints() {
@@ -21,16 +21,16 @@ public class PlayerLines {
     public int recalcAllPoints() {
         allPoints = 0;
         allPoints += frontLine.recalcPoints();
-        allPoints += middleLine.recalcPoints();
         allPoints += backLine.recalcPoints();
+        allPoints += basisLine.recalcPoints();
 
         return allPoints;
     }
 
     public void clear() {
         frontLine.clearLine();
-        middleLine.clearLine();
         backLine.clearLine();
+        basisLine.clearLine();
 
         recalcAllPoints();
     }
@@ -40,11 +40,11 @@ public class PlayerLines {
             case FRONT:
                 frontLine.addCard(card);
                 break;
-            case MIDDLE:
-                middleLine.addCard(card);
-                break;
             case BACK:
                 backLine.addCard(card);
+                break;
+            case BASIS:
+                basisLine.addCard(card);
                 break;
             default:
         }
