@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.mail.park.gwent.domains.game.WebSocketUser;
-import ru.mail.park.gwent.websocket.message.WantPlayMessage;
+import ru.mail.park.gwent.websocket.message.client.GameInitMessage;
 import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class SocketMessageHandlerManager {
     private final Map<Class<?>, SocketMessageHandler<?>> handlerMap = new HashMap<>();
 
     public SocketMessageHandlerManager(JoinHandler joinHandler) {
-        registerHandler(WantPlayMessage.class, joinHandler);
+        registerHandler(GameInitMessage.class, joinHandler);
     }
 
     public void handle(@NotNull WebSocketMessage message, WebSocketUser forUser) throws HandleException {

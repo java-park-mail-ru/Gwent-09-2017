@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.websocket.message.ClientState;
 import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 import java.io.IOException;
@@ -11,10 +12,12 @@ import java.io.IOException;
 public class WebSocketUser {
     private WebSocketSession session;
     private UserProfile userProfile;
+    private ClientState state;
 
     public WebSocketUser(WebSocketSession session, UserProfile userProfile) {
         this.session = session;
         this.userProfile = userProfile;
+        state = ClientState.INIT;
     }
 
     public WebSocketSession getSession() {
@@ -40,5 +43,13 @@ public class WebSocketUser {
     @SuppressWarnings("OverlyBroadThrowsClause")
     public void sendToUser(WebSocketMessage message, ObjectMapper objectMapper) throws IOException {
         session.sendMessage(new TextMessage(objectMapper.writeValueAsString(message)));
+    }
+
+    public ClientState getState() {
+        return state;
+    }
+
+    public void setState(ClientState state) {
+        this.state = state;
     }
 }

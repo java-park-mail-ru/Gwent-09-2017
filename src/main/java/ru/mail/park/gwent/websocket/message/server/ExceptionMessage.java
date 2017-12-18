@@ -1,6 +1,7 @@
-package ru.mail.park.gwent.websocket.message;
+package ru.mail.park.gwent.websocket.message.server;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 public class ExceptionMessage extends WebSocketMessage {
     private String type;

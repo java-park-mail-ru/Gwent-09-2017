@@ -15,7 +15,7 @@ import ru.mail.park.gwent.consts.Constants;
 import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.domains.game.WebSocketUser;
 import ru.mail.park.gwent.services.UserService;
-import ru.mail.park.gwent.websocket.message.ExceptionMessage;
+import ru.mail.park.gwent.websocket.message.server.ExceptionMessage;
 import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 import java.io.IOException;
