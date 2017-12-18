@@ -2,8 +2,8 @@ package ru.mail.park.gwent.services.dao;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mail.park.gwent.domains.auth.UserInfo;
 import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.domains.game.Player;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.persistence.EntityManager;
@@ -54,7 +54,7 @@ public class UserDao implements UserService {
     }
 
     @Override
-    public UserInfo getUserInfo(String login) {
+    public Player getPlayerInfo(String login) {
         final UserProfile profile = getUserProfile(login);
         final List<UserProfile> profiles =
                 em.createQuery("SELECT p FROM UserProfile p ORDER BY p.wins DESC, p.login", UserProfile.class)
@@ -62,22 +62,22 @@ public class UserDao implements UserService {
 
         final int position = profiles.indexOf(profile) + 1;
 
-        return new UserInfo(profile, position);
+        return new Player(profile, position);
     }
 
     @Override
-    public List<UserInfo> getUsers(int limit, int offset) {
+    public List<Player> getPlayers(int limit, int offset) {
         final List<UserProfile> profiles =
                 em.createQuery("SELECT p FROM UserProfile p ORDER BY p.wins DESC, p.login", UserProfile.class)
                         .setMaxResults(limit)
                         .setFirstResult(offset - 1)
                         .getResultList();
 
-        final List<UserInfo> result = new ArrayList<>();
+        final List<Player> result = new ArrayList<>();
         for (int i = 0; i < profiles.size(); i++) {
             final int position = offset + i;
-            final UserInfo userInfo = new UserInfo(profiles.get(i), position);
-            result.add(userInfo);
+            final Player player = new Player(profiles.get(i), position);
+            result.add(player);
         }
 
         return result;

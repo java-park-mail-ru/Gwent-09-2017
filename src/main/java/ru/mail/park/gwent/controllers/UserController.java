@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.mail.park.gwent.domains.auth.Message;
-import ru.mail.park.gwent.domains.auth.UserInfo;
 import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.domains.game.Player;
 import ru.mail.park.gwent.services.UserService;
 
 import java.util.List;
@@ -57,12 +57,12 @@ public class UserController {
             return ResponseEntity.badRequest().body(OFFSET_MUST_BE_OVER_THAN_ZERO.getMessage());
         }
 
-        final List<UserInfo> users = userService.getUsers(limit, offset);
+        final List<Player> players = userService.getPlayers(limit, offset);
 
-        if (users.isEmpty()) {
+        if (players.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(USER_LIST_IS_EMPTY.getMessage());
         }
 
-        return ResponseEntity.ok(users);
+        return ResponseEntity.ok(players);
     }
 }

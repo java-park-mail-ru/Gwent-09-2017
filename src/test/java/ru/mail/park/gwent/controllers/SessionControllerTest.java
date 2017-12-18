@@ -10,8 +10,8 @@ import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.mail.park.gwent.domains.auth.Message;
-import ru.mail.park.gwent.domains.auth.UserInfo;
 import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.domains.game.Player;
 import ru.mail.park.gwent.services.UserService;
 
 import java.util.Collections;
@@ -137,14 +137,14 @@ public class SessionControllerTest {
         requestHeaders.put(HttpHeaders.COOKIE, loginResponse.getHeaders().get("Set-Cookie"));
         final HttpEntity<Void> request = new HttpEntity<>(requestHeaders);
 
-        final ResponseEntity<UserInfo> response = restTemplate.exchange(AUTH_URL, HttpMethod.GET, request, UserInfo.class);
+        final ResponseEntity<Player> response = restTemplate.exchange(AUTH_URL, HttpMethod.GET, request, Player.class);
 
-        final UserInfo userInfo = response.getBody();
+        final Player player = response.getBody();
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-        assertNotNull(userInfo);
-        assertEquals(LOGIN, userInfo.getLogin());
-        assertEquals(EMAIL, userInfo.getEmail());
+        assertNotNull(player);
+        assertEquals(LOGIN, player.getLogin());
+        assertEquals(EMAIL, player.getEmail());
     }
 
     @Test

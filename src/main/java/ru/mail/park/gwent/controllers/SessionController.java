@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.mail.park.gwent.domains.auth.Message;
-import ru.mail.park.gwent.domains.auth.UserInfo;
 import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.domains.game.Player;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
@@ -38,12 +38,12 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
         if (hasPosition) {
-            final UserInfo userInfo = userService.getUserInfo(foundUserBySession.getLogin());
-            return ResponseEntity.ok(userInfo);
+            final Player player = userService.getPlayerInfo(foundUserBySession.getLogin());
+            return ResponseEntity.ok(player);
         }
 
-        final UserInfo userInfo = new UserInfo(foundUserBySession);
-        return ResponseEntity.ok(userInfo);
+        final Player player = new Player(foundUserBySession);
+        return ResponseEntity.ok(player);
     }
 
     @PostMapping

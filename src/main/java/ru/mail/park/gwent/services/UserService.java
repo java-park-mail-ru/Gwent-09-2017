@@ -1,7 +1,7 @@
 package ru.mail.park.gwent.services;
 
-import ru.mail.park.gwent.domains.auth.UserInfo;
 import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.domains.game.Player;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public interface UserService {
 
     boolean isExist(UserProfile profile);
 
-    UserInfo getUserInfo(String login);
+    Player getPlayerInfo(String login);
 
-    List<UserInfo> getUsers(int limit, int offset);
+    List<Player> getPlayers(int limit, int offset);
 }
