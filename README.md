@@ -1,14 +1,19 @@
-# ТехноГвинт
+# Тех-Гвинт
 
 [![Build Status](https://travis-ci.org/java-park-mail-ru/Gwent-09-2017.svg?branch=dev)](https://travis-ci.org/java-park-mail-ru/Gwent-09-2017)
 
-Реализация серверного API для игры ТехноГвинт
+Реализация серверного API для игры Тех-Гвинт
+
+## Играть
+
+[tech-gwent.xyz](https://tech-gwent.xyz)
 
 ## Описание игры
 
 Браузерная мультиплеерная карточная игра, по мотивам легендарной игры [Гвинт](https://www.playgwent.com).
-Отличительная особенность которой: героями игры являются преподаватели, менторы и студенты [Технопарка Mail.Ru](https://park.mail.ru).
 Это великолепная возможность устроить поединок в логике, стратегическом мышлении и самообладании.
+Реализована студентами [Технопарка Mail.Ru](https://park.mail.ru) 
+в рамках курса [Frontend-разработки](https://frontend-park-mailru.firebaseapp.com).
 
 ## Описание API
 
