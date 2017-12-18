@@ -1,17 +1,17 @@
 package ru.mail.park.gwent.websocket.handler;
 
 import org.jetbrains.annotations.NotNull;
-import ru.mail.park.gwent.domains.game.WebSocketUser;
+import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 public abstract class SocketMessageHandler<T extends WebSocketMessage> {
     private final Class<T> clazz;
 
-    public SocketMessageHandler(@NotNull Class<T> clazz) {
+    SocketMessageHandler(@NotNull Class<T> clazz) {
         this.clazz = clazz;
     }
 
-    public void handleMessage(@NotNull WebSocketMessage message, @NotNull WebSocketUser user) throws HandleException {
+    public void handleMessage(@NotNull WebSocketMessage message, @NotNull UserProfile user) throws HandleException {
         try {
             handle(clazz.cast(message), user);
         } catch (ClassCastException e) {
@@ -19,5 +19,5 @@ public abstract class SocketMessageHandler<T extends WebSocketMessage> {
         }
     }
 
-    public abstract void handle(@NotNull T message, @NotNull WebSocketUser user) throws HandleException;
+    public abstract void handle(@NotNull T message, @NotNull UserProfile user) throws HandleException;
 }

@@ -11,12 +11,11 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
-import ru.mail.park.gwent.consts.Constants;
 import ru.mail.park.gwent.domains.auth.UserProfile;
-import ru.mail.park.gwent.domains.game.WebSocketUser;
 import ru.mail.park.gwent.services.UserService;
-import ru.mail.park.gwent.websocket.message.server.ExceptionMessage;
+import ru.mail.park.gwent.services.game.UserSessionPointService;
 import ru.mail.park.gwent.websocket.message.WebSocketMessage;
+import ru.mail.park.gwent.websocket.message.server.ExceptionMessage;
 
 import java.io.IOException;
 
@@ -26,15 +25,18 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameWebSocketHandler.class);
     private static final CloseStatus ACCESS_DENIED = new CloseStatus(4500, "Not logged in. Access denied");
 
-    private SocketMessageHandlerManager handlerManager;
+    private GameMessageHandlerContainer handlerManager;
     private UserService userService;
+    private final UserSessionPointService remotePointService;
     private ObjectMapper objectMapper;
 
-    public GameWebSocketHandler(@NotNull SocketMessageHandlerManager handlerManager,
+    public GameWebSocketHandler(@NotNull GameMessageHandlerContainer handlerManager,
                                 @NotNull UserService userService,
+                                UserSessionPointService remotePointService,
                                 ObjectMapper objectMapper) {
         this.handlerManager = handlerManager;
         this.userService = userService;
+        this.remotePointService = remotePointService;
         this.objectMapper = objectMapper;
     }
 
@@ -42,11 +44,19 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(@NotNull WebSocketSession session) {
         final UserProfile profile = (UserProfile) session.getAttributes().get(SESSION_USER_PROFILE_KEY);
         if (profile == null || !userService.isExist(profile)) {
-            LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
+            LOGGER.warn("User requested websocket is not registred or not logged in. Opening websocket session is denied.");
             closeSessionSilently(session);
-        } else {
-            LOGGER.info("User " + profile.getLogin() + " connected");
+            return;
         }
+
+        if (remotePointService.isConnected(profile)) {
+            LOGGER.warn("User already requested websocket. Opening websocket session is denied.");
+            closeSessionSilently(session);
+            return;
+        }
+
+        remotePointService.registerUser(profile, session);
+        LOGGER.info("User " + profile.getLogin() + " connected");
     }
 
     @Override
@@ -56,18 +66,19 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         }
         final UserProfile profile = (UserProfile) session.getAttributes().get(SESSION_USER_PROFILE_KEY);
         if (profile == null || !userService.isExist(profile)) {
-            LOGGER.warn("User requested websocket is not registred or not logged in. Openning websocket session is denied.");
+            LOGGER.warn("User requested websocket is not registred or not logged in. Opening websocket session is denied.");
             closeSessionSilently(session);
             return;
         }
 
-        WebSocketUser webSocketUser = (WebSocketUser) session.getAttributes().get(Constants.SESSION_WEB_SOCKET_USER_KEY);
-        if (webSocketUser == null) {
-            webSocketUser = new WebSocketUser(session, profile);
-            session.getAttributes().put(Constants.SESSION_WEB_SOCKET_USER_KEY, webSocketUser);
+        if (!remotePointService.isConnected(profile)) {
+            LOGGER.error("User not connected to the game");
+            closeSessionSilently(session);
+            return;
         }
+
         try {
-            handleMessage(webSocketUser, message);
+            handleMessage(profile, message);
         } catch (HandleException e) {
             session.sendMessage(new TextMessage(exceptionToJson(e)));
         }
@@ -84,21 +95,18 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
     private String exceptionToJson(Throwable ex) {
         try {
             final ResponseStatus responseStatus = AnnotatedElementUtils.findMergedAnnotation(ex.getClass(), ResponseStatus.class);
-            if (responseStatus != null) {
-                String reason = ex.getMessage();
-                if (reason == null) {
-                    reason = responseStatus.reason();
-                }
-                return objectMapper.writeValueAsString(new ExceptionMessage().setReason(reason));
+            String reason = ex.getMessage();
+            if (reason == null) {
+                reason = responseStatus.reason();
             }
-            return objectMapper.writeValueAsString(new ExceptionMessage().setReason(ex.getMessage()));
+            return objectMapper.writeValueAsString(new ExceptionMessage().setReason(reason));
         } catch (JsonProcessingException e) {
             return "Error in processing Exception";
         }
     }
 
     @SuppressWarnings("OverlyBroadCatchBlock")
-    private void handleMessage(WebSocketUser user, @NotNull TextMessage text) throws HandleException {
+    private void handleMessage(UserProfile user, @NotNull TextMessage text) throws HandleException {
         final WebSocketMessage message;
         try {
             message = objectMapper.readValue(text.getPayload(), WebSocketMessage.class);
@@ -125,8 +133,10 @@ public class GameWebSocketHandler extends TextWebSocketHandler {
         final UserProfile profile = (UserProfile) session.getAttributes().get(SESSION_USER_PROFILE_KEY);
         if (profile == null) {
             LOGGER.warn("User disconnected but his session was not found (closeStatus=" + status + ')');
-        } else {
-            LOGGER.info("User " + profile.getLogin() + " disconnected");
+            return;
         }
+
+        remotePointService.removeUser(profile);
+        LOGGER.info("User " + profile.getLogin() + " disconnected");
     }
 }

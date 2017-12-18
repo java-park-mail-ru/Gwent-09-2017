@@ -3,7 +3,7 @@ package ru.mail.park.gwent.websocket.message.client;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
-public class GameInitMessage extends WebSocketMessage {
+public class JoinGameMessage extends WebSocketMessage {
     private String type;
     private String deckType;
 

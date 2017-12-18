@@ -1,29 +1,28 @@
 package ru.mail.park.gwent.services.game;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.domains.game.UserPair;
-import ru.mail.park.gwent.domains.game.WebSocketUser;
 import ru.mail.park.gwent.websocket.handler.HandleException;
+import ru.mail.park.gwent.websocket.message.ClientState;
+import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 import ru.mail.park.gwent.websocket.message.server.ReadyMessage;
 import ru.mail.park.gwent.websocket.message.server.WaitingPlayerMessage;
-import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 
 import java.io.IOException;
 
 @Service
 public class UserPairService {
     private PlayerQueueService playerQueueService;
-    private ObjectMapper objectMapper;
-//    private LobbyService lobbyService;
+    private UserSessionPointService remotePointService;
 
-    public UserPairService(PlayerQueueService playerQueueService, LobbyService lobbyService, ObjectMapper objectMapper) {
+    public UserPairService(PlayerQueueService playerQueueService,
+                           UserSessionPointService remotePointService) {
         this.playerQueueService = playerQueueService;
-//        this.lobbyService = lobbyService;
-        this.objectMapper = objectMapper;
+        this.remotePointService = remotePointService;
     }
 
-    public WebSocketMessage onInitUser(WebSocketUser user) throws HandleException {
+    public WebSocketMessage onInitUser(UserProfile user) throws HandleException {
         final UserPair userPair = playerQueueService.joinUser(user);
         if (userPair == null) {
             return new WaitingPlayerMessage();
@@ -31,10 +30,10 @@ public class UserPairService {
         return onFindPair(userPair);
     }
 
-    public WebSocketMessage onFindPair(UserPair userPair) {
-//        lobbyService.createLobby(userPair);
+    private WebSocketMessage onFindPair(UserPair userPair) {
         try {
-            userPair.getSecondUser().sendToUser(new ReadyMessage(), objectMapper);
+            remotePointService.setUserState(userPair.getSecondUser(), ClientState.READY);
+            remotePointService.sendMessageToUser(userPair.getSecondUser(), new ReadyMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
