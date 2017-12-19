@@ -1,33 +1,27 @@
-# Тех-Гвинт
+# Gwent API
 
 [![Build Status](https://travis-ci.org/java-park-mail-ru/Gwent-09-2017.svg?branch=dev)](https://travis-ci.org/java-park-mail-ru/Gwent-09-2017)
-
-Реализация серверного API для игры Тех-Гвинт
 
 ## Играть
 
 [tech-gwent.xyz](https://tech-gwent.xyz)
 
-## Описание игры
+## Описание
 
-Браузерная мультиплеерная карточная игра, по мотивам легендарной игры [Гвинт](https://www.playgwent.com).
-Это великолепная возможность устроить поединок в логике, стратегическом мышлении и самообладании.
-Реализована студентами [Технопарка Mail.Ru](https://park.mail.ru) 
-в рамках курса [Frontend-разработки](https://frontend-park-mailru.firebaseapp.com).
+Реализация серверного API для игры [Gwent]((https://github.com/frontend-park-mail-ru/2017_2_GwentTeam)).
 
-## Описание API
+Gwent - браузерная мультиплеерная карточная игра, по мотивам легендарной игры [Гвинт](https://www.playgwent.com).
+Реализована студентами [Технопарка Mail.Ru](https://park.mail.ru) в рамках курса [Frontend-разработки](https://frontend-park-mailru.firebaseapp.com).
 
-#### Версия 0.1.2
+## Документация API
+
+### Версия 0.1.2
 
 Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/TechnoGwentAPI/0.1.2)
 
-## Deploy
-
-API к игре развернуто на хостинге: <https://technogwent-api-012.herokuapp.com>
-
 ## Frontend
 
-Репозиторий фронтенд части игры: <https://github.com/frontend-park-mail-ru/2017_2_GwentTeam>
+[Репозиторий](https://github.com/frontend-park-mail-ru/2017_2_GwentTeam) Frontend-части игры.
 
 ## Команда
 
@@ -59,8 +53,37 @@ API к игре развернуто на хостинге: <https://technogwent
 
 * <https://github.com/aorel>
 
+## Установка
+
+```
+mvn clean install
+```
+
+## Средства разработки
+
+### Backend
+
+- Java
+- Spring Boot
+- PostgreSQL
+
+### Frontend
+
+- JavaScript
+- Webpack
+- Stylus
+- Babel
+- Pug
+- ESLint
+
+#### Common
+
+- WebSocket
+- CI [TRAVIS]
+- CORS
+
 ## Лицензия
 
-Код реализован под [MIT License](LICENSE.md).
+Проект реализован под [MIT License](LICENSE.md).
 
 Проект является учебным и [CD PROJEKT RED](http://en.cdprojektred.com) не выступают в качестве партнера.
