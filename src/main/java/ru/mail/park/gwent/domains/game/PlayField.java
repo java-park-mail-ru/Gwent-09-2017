@@ -15,9 +15,10 @@ public class PlayField {
     private PlayerLines secondPlayerLines;
 
     public PlayField() {
-        final Deck deck = Mechanics.genarateDeck();
-        firstPlayerHand = Mechanics.getHand(deck);
-        secondPlayerHand = Mechanics.getHand(deck);
+        final Deck deckForFirstPlayer = Mechanics.genarateDeck();
+        firstPlayerHand = Mechanics.getHand(deckForFirstPlayer);
+        final Deck deckForSecondPlayer = Mechanics.genarateDeck();
+        secondPlayerHand = Mechanics.getHand(deckForSecondPlayer);
 
         firstPlayerLines = new PlayerLines();
         secondPlayerLines = new PlayerLines();

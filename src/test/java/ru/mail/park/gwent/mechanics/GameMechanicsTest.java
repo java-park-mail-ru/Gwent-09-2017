@@ -14,9 +14,6 @@ import ru.mail.park.gwent.domains.game.Player;
 import ru.mail.park.gwent.services.game.UserSessionPointService;
 import ru.mail.park.gwent.websocket.message.client.StepMessage;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RunWith(SpringRunner.class)
 public class GameMechanicsTest {
@@ -33,7 +30,7 @@ public class GameMechanicsTest {
 
     @Before
     public void setUp() {
-        when(remotePointService.isConnected(any())).thenReturn(true);
+//        when(remotePointService.isConnected(any())).thenReturn(true);
         player1 = new Player("player1", "player1@my.com");
         player2 = new Player("player2", "player2@my.com");
         startGame(player1, player2);
@@ -62,7 +59,7 @@ public class GameMechanicsTest {
         Assert.assertEquals(10, gameSession.getPlayField().getFirstPlayerHand().getCards().size());
         Assert.assertEquals(0, gameSession.getPlayField().getFirstPlayerLines().recalcAllPoints());
 
-        Card firstCard = gameSession.getPlayField().getFirstPlayerHand().getCards().get(0);
+        final Card firstCard = gameSession.getPlayField().getFirstPlayerHand().getCards().get(0);
         gameMechanics.step(player1, new StepMessage(firstCard));
         Assert.assertEquals(9, gameSession.getPlayField().getFirstPlayerHand().getCards().size());
         Assert.assertEquals(firstCard.getPoints(), gameSession.getPlayField().getFirstPlayerLines().recalcAllPoints());
@@ -75,7 +72,7 @@ public class GameMechanicsTest {
         Assert.assertEquals(10, gameSession.getPlayField().getSecondPlayerHand().getCards().size());
         Assert.assertEquals(0, gameSession.getPlayField().getSecondPlayerLines().recalcAllPoints());
 
-        Card secondCard = gameSession.getPlayField().getSecondPlayerHand().getCards().get(0);
+        final Card secondCard = gameSession.getPlayField().getSecondPlayerHand().getCards().get(0);
         gameMechanics.stepOpponent(player2, new StepMessage(secondCard));
         Assert.assertEquals(9, gameSession.getPlayField().getSecondPlayerHand().getCards().size());
         Assert.assertEquals(secondCard.getPoints(), gameSession.getPlayField().getSecondPlayerLines().recalcAllPoints());
