@@ -1,7 +1,7 @@
 package ru.mail.park.gwent.domains.game;
 
 import org.jetbrains.annotations.NotNull;
-import ru.mail.park.gwent.services.game.Mechanics;
+import ru.mail.park.gwent.mechanics.Mechanics;
 
 public class PlayField {
     @NotNull

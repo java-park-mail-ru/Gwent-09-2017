@@ -8,9 +8,6 @@ import ru.mail.park.gwent.websocket.message.WebSocketMessage;
 public class StepMessage extends WebSocketMessage {
     private Card card;
 
-    public StepMessage() {
-    }
-
     public StepMessage(Card card) {
         this.card = card;
     }

@@ -16,14 +16,13 @@ public class GameSession {
     @NotNull
     private final Player second;
     @NotNull
-    private final PlayField playField;
+    private final PlayField playField = new PlayField();
 
-    public GameSession(@NotNull Player first,
-                       @NotNull Player second) {
+    GameSession(@NotNull Player first,
+                @NotNull Player second) {
         this.sessionId = ID_GENERATOR.getAndIncrement();
         this.first = first;
         this.second = second;
-        this.playField = new PlayField();
     }
 
     @NotNull

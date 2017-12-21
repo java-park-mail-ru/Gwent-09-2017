@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.mail.park.gwent.domains.game.Player;
-import ru.mail.park.gwent.services.game.UserSessionPointService;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -21,13 +20,8 @@ public class GameSessionService {
     @NotNull
     private final Set<GameSession> gameSessions = new LinkedHashSet<>();
 
+    @SuppressWarnings("unused")
     @NotNull
-    private final UserSessionPointService userSessionPointService;
-
-    public GameSessionService(@NotNull UserSessionPointService userSessionPointService) {
-        this.userSessionPointService = userSessionPointService;
-    }
-
     public Set<GameSession> getGameSessions() {
         return gameSessions;
     }

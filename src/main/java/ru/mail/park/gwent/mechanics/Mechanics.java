@@ -1,4 +1,4 @@
-package ru.mail.park.gwent.services.game;
+package ru.mail.park.gwent.mechanics;
 
 import ru.mail.park.gwent.domains.game.*;
 

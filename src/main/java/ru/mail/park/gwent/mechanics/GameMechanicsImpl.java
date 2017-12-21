@@ -5,9 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.mail.park.gwent.domains.game.Card;
+import ru.mail.park.gwent.domains.game.PlayField;
 import ru.mail.park.gwent.domains.game.Player;
-import ru.mail.park.gwent.services.UserService;
-import ru.mail.park.gwent.services.game.UserSessionPointService;
 import ru.mail.park.gwent.websocket.message.client.StepMessage;
 
 import java.util.Iterator;
@@ -21,22 +20,12 @@ public class GameMechanicsImpl implements GameMechanics {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameMechanicsImpl.class);
 
     @NotNull
-    private final UserService userService;
-
-    @NotNull
-    private final UserSessionPointService remotePointService;
-
-    @NotNull
     private final GameSessionService gameSessionService;
 
     @NotNull
     private ConcurrentLinkedQueue<Player> waiters = new ConcurrentLinkedQueue<>();
 
-    public GameMechanicsImpl(@NotNull UserService userService,
-                             @NotNull UserSessionPointService remotePointService,
-                             @NotNull GameSessionService gameSessionService) {
-        this.userService = userService;
-        this.remotePointService = remotePointService;
+    public GameMechanicsImpl(@NotNull GameSessionService gameSessionService) {
         this.gameSessionService = gameSessionService;
     }
 
@@ -70,17 +59,23 @@ public class GameMechanicsImpl implements GameMechanics {
     @Override
     public void step(Player player, StepMessage message) {
         GameSession gameSession = gameSessionService.getSessionForUser(player);
-        Card card = message.getCard();
-        gameSession.getPlayField().getFirstPlayerHand().removeCard(card);
-        gameSession.getPlayField().getFirstPlayerLines().addCartToLine(card);
+        if (gameSession != null) {
+            final PlayField playField = gameSession.getPlayField();
+            Card card = message.getCard();
+            playField.getFirstPlayerHand().removeCard(card);
+            playField.getFirstPlayerLines().addCartToLine(card);
+        }
     }
 
     @Override
     public void stepOpponent(Player player, StepMessage message) {
         GameSession gameSession = gameSessionService.getSessionForUser(player);
-        Card card = message.getCard();
-        gameSession.getPlayField().getSecondPlayerHand().removeCard(card);
-        gameSession.getPlayField().getSecondPlayerLines().addCartToLine(card);
+        if (gameSession != null) {
+            final PlayField playField = gameSession.getPlayField();
+            Card card = message.getCard();
+            playField.getSecondPlayerHand().removeCard(card);
+            playField.getSecondPlayerLines().addCartToLine(card);
+        }
     }
 
     @Override

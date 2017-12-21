@@ -13,7 +13,9 @@ public interface GameMechanics {
 
     void stepOpponent(Player player, StepMessage message);
 
+    @SuppressWarnings("unused")
     void pass(Player player);
 
+    @SuppressWarnings("unused")
     void passOpponent(Player player);
 }

@@ -8,7 +8,7 @@ public class Line {
     private int sumPoints;
     private List<Card> lineCards;
 
-    public Line(CardType type) {
+    Line(CardType type) {
         this.type = type;
         sumPoints = 0;
         lineCards = new ArrayList<>();
@@ -20,10 +20,6 @@ public class Line {
 
     public void setType(CardType type) {
         this.type = type;
-    }
-
-    public int getSumPoints() {
-        return sumPoints;
     }
 
     public void addCard(Card card) {

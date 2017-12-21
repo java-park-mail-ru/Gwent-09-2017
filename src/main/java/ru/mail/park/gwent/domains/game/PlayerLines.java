@@ -7,15 +7,11 @@ public class PlayerLines {
     private Line backLine;
     private Line basisLine;
 
-    public PlayerLines() {
+    PlayerLines() {
         allPoints = 0;
         frontLine = new Line(CardType.FRONT);
         backLine = new Line(CardType.BACK);
         basisLine = new Line(CardType.BASIS);
-    }
-
-    public int getAllPoints() {
-        return allPoints;
     }
 
     public int recalcAllPoints() {
@@ -27,6 +23,7 @@ public class PlayerLines {
         return allPoints;
     }
 
+    @SuppressWarnings("unused")
     public void clear() {
         frontLine.clearLine();
         backLine.clearLine();

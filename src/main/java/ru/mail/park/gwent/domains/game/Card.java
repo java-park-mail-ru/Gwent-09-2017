@@ -13,10 +13,6 @@ public class Card {
         return points;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
     public CardType getType() {
         return type;
     }
@@ -36,10 +32,7 @@ public class Card {
 
         final Card card = (Card) obj;
 
-        if (points != card.points) {
-            return false;
-        }
-        return type == card.type;
+        return points == card.points && type == card.type;
     }
 
     @Override

@@ -59,6 +59,7 @@ public class UserProfile {
         return wins;
     }
 
+    @SuppressWarnings("unused")
     public Integer addWin() {
         return wins++;
     }
