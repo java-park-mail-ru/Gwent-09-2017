@@ -1,19 +1,23 @@
 package ru.mail.park.gwent.domains.game;
 
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Deck {
-    private List<Card> cards;
+    private CopyOnWriteArrayList<Card> cards;
 
-    public Deck(List<Card> cards) {
+    public Deck(CopyOnWriteArrayList<Card> cards) {
         this.cards = cards;
     }
 
-    public List<Card> getCards() {
+    public CopyOnWriteArrayList<Card> getCards() {
         return cards;
     }
 
     public boolean hasCard(Card card) {
         return cards.contains(card);
+    }
+
+    public void removeCard(Card card) {
+        cards.remove(card);
     }
 }
