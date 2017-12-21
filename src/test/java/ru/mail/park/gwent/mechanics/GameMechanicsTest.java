@@ -7,18 +7,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.mail.park.gwent.domains.game.Card;
 import ru.mail.park.gwent.domains.game.Player;
-import ru.mail.park.gwent.services.game.UserSessionPointService;
 import ru.mail.park.gwent.websocket.message.client.StepMessage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RunWith(SpringRunner.class)
 public class GameMechanicsTest {
-    @MockBean
-    private UserSessionPointService remotePointService;
     @Autowired
     private GameMechanics gameMechanics;
     @Autowired
@@ -30,7 +26,6 @@ public class GameMechanicsTest {
 
     @Before
     public void setUp() {
-//        when(remotePointService.isConnected(any())).thenReturn(true);
         player1 = new Player("player1", "player1@my.com");
         player2 = new Player("player2", "player2@my.com");
         startGame(player1, player2);
