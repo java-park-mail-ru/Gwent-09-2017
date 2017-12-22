@@ -82,4 +82,11 @@ public class UserDao implements UserService {
 
         return result;
     }
+
+    @Override
+    public void incWins(UserProfile profile) {
+        profile.incWins();
+        updateUser(profile);
+    }
+
 }

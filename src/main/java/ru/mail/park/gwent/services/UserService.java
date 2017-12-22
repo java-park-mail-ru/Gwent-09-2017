@@ -19,4 +19,6 @@ public interface UserService {
     Player getPlayerInfo(String login);
 
     List<Player> getPlayers(int limit, int offset);
+
+    void incWins(UserProfile profile);
 }

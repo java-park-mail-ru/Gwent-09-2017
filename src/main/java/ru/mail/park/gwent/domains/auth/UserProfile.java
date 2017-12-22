@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.Nullable;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Table(name = "users")
@@ -15,7 +17,9 @@ public class UserProfile {
     private String login;
     private String password;
     private String email;
-    private Integer wins;
+
+    @Convert(converter = AtomicIntConverter.class)
+    private AtomicInteger wins;
 
     public UserProfile() {
     }
@@ -28,7 +32,7 @@ public class UserProfile {
         this.login = login;
         this.password = password;
         this.email = email;
-        wins = 0;
+        wins = new AtomicInteger(0);
     }
 
     public String getLogin() {
@@ -55,13 +59,12 @@ public class UserProfile {
         this.email = email;
     }
 
-    public Integer getWins() {
-        return wins;
+    public int getWins() {
+        return wins.get();
     }
 
-    @SuppressWarnings("unused")
-    public Integer addWin() {
-        return wins++;
+    public void incWins() {
+        wins.getAndIncrement();
     }
 
     @Override

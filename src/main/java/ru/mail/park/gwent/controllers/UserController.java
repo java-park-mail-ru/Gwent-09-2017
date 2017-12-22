@@ -10,10 +10,10 @@ import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.domains.game.Player;
 import ru.mail.park.gwent.services.UserService;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static ru.mail.park.gwent.consts.Constants.SIGN_UP_URL;
-import static ru.mail.park.gwent.consts.Constants.USERS_URL;
+import static ru.mail.park.gwent.consts.Constants.*;
 import static ru.mail.park.gwent.domains.auth.MessageEnum.*;
 
 @RestController
@@ -64,5 +64,18 @@ public class UserController {
         }
 
         return ResponseEntity.ok(players);
+    }
+
+    @PostMapping(USERS_URL)
+    public ResponseEntity<?> incrementWins(HttpSession session) {
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_USER_PROFILE_KEY);
+
+        if (foundUserBySession == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
+        }
+
+        userService.incWins(foundUserBySession);
+
+        return ResponseEntity.ok(foundUserBySession);
     }
 }
