@@ -65,6 +65,7 @@ mvn clean install
 
 - Java
 - Spring Boot
+- Maven
 - PostgreSQL
 
 ### Frontend
