@@ -1,28 +1,27 @@
-# ТехноГвинт
+# Gwent API
 
 [![Build Status](https://travis-ci.org/java-park-mail-ru/Gwent-09-2017.svg?branch=dev)](https://travis-ci.org/java-park-mail-ru/Gwent-09-2017)
 
-Реализация серверного API для игры ТехноГвинт
+## Играть
 
-## Описание игры
+[tech-gwent.xyz](https://tech-gwent.xyz)
 
-Браузерная мультиплеерная карточная игра, по мотивам легендарной игры [Гвинт](https://www.playgwent.com).
-Отличительная особенность которой: героями игры являются преподаватели, менторы и студенты [Технопарка Mail.Ru](https://park.mail.ru).
-Это великолепная возможность устроить поединок в логике, стратегическом мышлении и самообладании.
+## Описание
 
-## Описание API
+Реализация серверного API для игры [Gwent]((https://github.com/frontend-park-mail-ru/2017_2_GwentTeam)).
 
-#### Версия 0.1.1
+Gwent - браузерная мультиплеерная карточная игра, по мотивам легендарной игры [Гвинт](https://www.playgwent.com).
+Реализована студентами [Технопарка Mail.Ru](https://park.mail.ru) в рамках курса [Frontend-разработки](https://frontend-park-mailru.firebaseapp.com).
 
-Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/TechnoGwentAPI/0.1.1)
+## Документация API
 
-## Deploy
+### Версия 1.0.0
 
-API к игре развернуто на хостинге: <https://technogwent-api-011.herokuapp.com>
+Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/GwentAPI/1.0.0)
 
 ## Frontend
 
-Репозиторий фронтенд части игры: <https://github.com/frontend-park-mail-ru/2017_2_GwentTeam>
+[Репозиторий](https://github.com/frontend-park-mail-ru/2017_2_GwentTeam) Frontend-части игры.
 
 ## Команда
 
@@ -54,8 +53,38 @@ API к игре развернуто на хостинге: <https://technogwent
 
 * <https://github.com/aorel>
 
+## Установка
+
+```
+mvn clean install
+```
+
+## Средства разработки
+
+### Backend
+
+- Java
+- Spring Boot
+- Maven
+- PostgreSQL
+
+### Frontend
+
+- JavaScript
+- Webpack
+- Stylus
+- Babel
+- Pug
+- ESLint
+
+### Common
+
+- WebSocket
+- CI [TRAVIS]
+- CORS
+
 ## Лицензия
 
-Код реализован под [MIT License](LICENSE.md).
+Проект реализован под [MIT License](LICENSE.md).
 
-Проект является учебным и [CD PROJEKT RED](http://en.cdprojektred.com/) не выступают в качестве партнера.
+Проект является учебным и [CD PROJEKT RED](http://en.cdprojektred.com) не выступают в качестве партнера.

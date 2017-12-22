@@ -5,18 +5,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import ru.mail.park.gwent.domains.Message;
-import ru.mail.park.gwent.domains.UserInfo;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.Message;
+import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.domains.game.Player;
 import ru.mail.park.gwent.services.UserService;
 
 import javax.servlet.http.HttpSession;
 
-import static ru.mail.park.gwent.domains.MessageEnum.*;
+import static ru.mail.park.gwent.consts.Constants.AUTH_URL;
+import static ru.mail.park.gwent.consts.Constants.SESSION_USER_PROFILE_KEY;
+import static ru.mail.park.gwent.domains.auth.MessageEnum.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(AUTH_URL)
 public class SessionController {
+
     private final UserService userService;
     private final PasswordEncoder encoder;
 
@@ -27,15 +30,20 @@ public class SessionController {
     }
 
     @GetMapping
-    public ResponseEntity getLoggedUserProfile(HttpSession session) {
-        final String sessionId = session.getId();
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+    public ResponseEntity<?> getLoggedUserInfo(
+            HttpSession session,
+            @RequestParam(required = false, defaultValue = "false") boolean hasPosition) {
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_USER_PROFILE_KEY);
         if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
-        } else {
-            final UserInfo userInfo = new UserInfo(foundUserBySession.getLogin(), foundUserBySession.getEmail());
-            return ResponseEntity.ok(userInfo);
         }
+        if (hasPosition) {
+            final Player player = userService.getPlayerInfo(foundUserBySession.getLogin());
+            return ResponseEntity.ok(player);
+        }
+
+        final Player player = new Player(foundUserBySession);
+        return ResponseEntity.ok(player);
     }
 
     @PostMapping
@@ -48,13 +56,12 @@ public class SessionController {
             return ResponseEntity.badRequest().body(EMPTY_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final UserProfile foundUserByLogin = userService.getUserByLogin(profile.getLogin());
+        final UserProfile foundUserByLogin = userService.getUserProfile(profile.getLogin());
         if (foundUserByLogin == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        final String sessionId = session.getId();
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_USER_PROFILE_KEY);
         if (foundUserBySession != null) {
             if (foundUserBySession.equals(foundUserByLogin)) {
                 // пользователь авторизован и пытается авторизоваться под своим именем еще раз
@@ -69,20 +76,21 @@ public class SessionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(WRONG_LOGIN_OR_PASSWORD.getMessage());
         }
 
-        session.setAttribute(sessionId, foundUserByLogin);
+        session.setAttribute(SESSION_USER_PROFILE_KEY, foundUserByLogin);
         return ResponseEntity.ok().body(AUTHORIZED.getMessage());
     }
 
     @DeleteMapping
     public ResponseEntity<Message> signOut(HttpSession session) {
-        final String sessionId = session.getId();
-        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(sessionId);
+        final UserProfile foundUserBySession = (UserProfile) session.getAttribute(SESSION_USER_PROFILE_KEY);
 
         if (foundUserBySession == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(NOT_AUTHORIZED.getMessage());
         }
 
-        session.removeAttribute(sessionId);
+        session.removeAttribute(SESSION_USER_PROFILE_KEY);
+        session.invalidate();
+
         return ResponseEntity.ok().body(LOGGED_OUT.getMessage());
     }
 }

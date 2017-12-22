@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.UserProfile;
 import ru.mail.park.gwent.services.UserService;
-import ru.mail.park.gwent.services.exceptions.DuplicateUserException;
 
 import static org.junit.Assert.*;
 
@@ -64,7 +63,7 @@ public class UserDaoTest {
         final UserProfile createdUser = userService.createUser(user);
 
         userService.deleteUser(createdUser);
-        final UserProfile foundedUser = userService.getUserByLogin(createdUser.getLogin());
+        final UserProfile foundedUser = userService.getUserProfile(createdUser.getLogin());
 
         assertNull(foundedUser);
     }
@@ -74,7 +73,7 @@ public class UserDaoTest {
         final UserProfile user = new UserProfile(LOGIN, PASSWORD, EMAIL);
         final UserProfile createdUser = userService.createUser(user);
 
-        final UserProfile foundedUser = userService.getUserByLogin(createdUser.getLogin());
+        final UserProfile foundedUser = userService.getUserProfile(createdUser.getLogin());
 
         assertNotNull(foundedUser);
     }
@@ -92,5 +91,24 @@ public class UserDaoTest {
         assertEquals(LOGIN, updatedUser.getLogin());
         assertEquals(UPDATED_PASSWORD, updatedUser.getPassword());
         assertEquals(UPDATED_EMAIL, updatedUser.getEmail());
+    }
+
+    @Test
+    public void isNotExistUser() {
+        final UserProfile user = new UserProfile(LOGIN, PASSWORD, EMAIL);
+
+        final boolean isExist = userService.isExist(user);
+
+        assertFalse(isExist);
+    }
+
+    @Test
+    public void isExistUser() {
+        final UserProfile user = new UserProfile(LOGIN, PASSWORD, EMAIL);
+        userService.createUser(user);
+
+        final boolean isExist = userService.isExist(user);
+
+        assertTrue(isExist);
     }
 }

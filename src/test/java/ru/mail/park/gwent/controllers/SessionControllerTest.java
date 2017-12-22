@@ -9,9 +9,9 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.mail.park.gwent.domains.Message;
-import ru.mail.park.gwent.domains.UserInfo;
-import ru.mail.park.gwent.domains.UserProfile;
+import ru.mail.park.gwent.domains.auth.Message;
+import ru.mail.park.gwent.domains.auth.UserProfile;
+import ru.mail.park.gwent.domains.game.Player;
 import ru.mail.park.gwent.services.UserService;
 
 import java.util.Collections;
@@ -24,7 +24,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static ru.mail.park.gwent.domains.MessageEnum.*;
+import static ru.mail.park.gwent.consts.Constants.AUTH_URL;
+import static ru.mail.park.gwent.consts.Constants.LOCALHOST;
+import static ru.mail.park.gwent.domains.auth.MessageEnum.*;
 
 /**
  * @author Konstantin Gulyy
@@ -39,16 +41,17 @@ public class SessionControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
-    private static final String AUTH_URL = "/api/auth";
     private static final String LOGIN = "login";
     private static final String EMAIL = "email@email.ru";
     private static final String PASSWORD = "password";
+    private static final String EMPTY_LOGIN = "";
+    private static final String EMPTY_PASSWORD = "";
     private static final String WRONG_PASSWORD = "wrong-password";
 
     private HttpHeaders setUpHttpHeaders() {
         final HttpHeaders headers = new HttpHeaders();
 
-        final List<String> origin = Collections.singletonList("http://localhost:8000");
+        final List<String> origin = Collections.singletonList(LOCALHOST);
         headers.put(HttpHeaders.ORIGIN, origin);
         final List<String> contentType = Collections.singletonList("application/json");
         headers.put(HttpHeaders.CONTENT_TYPE, contentType);
@@ -77,7 +80,7 @@ public class SessionControllerTest {
 
     @Test
     public void testSignInEmptyLoginAndPassword() {
-        final UserProfile user = new UserProfile("", "", null);
+        final UserProfile user = new UserProfile(EMPTY_LOGIN, EMPTY_PASSWORD, null);
 
         final ResponseEntity<Message> response = restTemplate.postForEntity(AUTH_URL, user, Message.class);
 
@@ -87,12 +90,12 @@ public class SessionControllerTest {
 
     @Test
     public void testSingInWrongLogin() {
-        when(userService.getUserByLogin(anyString())).thenReturn(null);
+        when(userService.getUserProfile(anyString())).thenReturn(null);
         final UserProfile login = new UserProfile(LOGIN, PASSWORD, EMAIL);
 
         final ResponseEntity<Message> loginResponse = restTemplate.postForEntity(AUTH_URL, login, Message.class);
 
-        verify(userService).getUserByLogin(anyString());
+        verify(userService).getUserProfile(anyString());
         assertEquals(HttpStatus.FORBIDDEN, loginResponse.getStatusCode());
         assertEquals(WRONG_LOGIN_OR_PASSWORD.getMessage(), loginResponse.getBody());
     }
@@ -100,12 +103,12 @@ public class SessionControllerTest {
     @Test
     public void testSingInWrongPassword() {
         final UserProfile userMock = new UserProfile(LOGIN, passwordEncoder.encode(PASSWORD), EMAIL);
-        when(userService.getUserByLogin(eq(LOGIN))).thenReturn(userMock);
+        when(userService.getUserProfile(eq(LOGIN))).thenReturn(userMock);
 
         final UserProfile login = new UserProfile(LOGIN, WRONG_PASSWORD, EMAIL);
         final ResponseEntity<Message> loginResponse = restTemplate.postForEntity(AUTH_URL, login, Message.class);
 
-        verify(userService).getUserByLogin(eq(LOGIN));
+        verify(userService).getUserProfile(eq(LOGIN));
         assertEquals(HttpStatus.FORBIDDEN, loginResponse.getStatusCode());
         assertEquals(WRONG_LOGIN_OR_PASSWORD.getMessage(), loginResponse.getBody());
     }
@@ -121,12 +124,12 @@ public class SessionControllerTest {
     @Test
     public void testLoginSuccess() {
         final UserProfile userMock = new UserProfile(LOGIN, passwordEncoder.encode(PASSWORD), EMAIL);
-        when(userService.getUserByLogin(eq(LOGIN))).thenReturn(userMock);
+        when(userService.getUserProfile(eq(LOGIN))).thenReturn(userMock);
 
         final UserProfile login = new UserProfile(LOGIN, PASSWORD, EMAIL);
         final ResponseEntity<Message> loginResponse = restTemplate.postForEntity(AUTH_URL, login, Message.class);
 
-        verify(userService).getUserByLogin(eq(LOGIN));
+        verify(userService).getUserProfile(eq(LOGIN));
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
         assertEquals(AUTHORIZED.getMessage(), loginResponse.getBody());
 
@@ -134,25 +137,25 @@ public class SessionControllerTest {
         requestHeaders.put(HttpHeaders.COOKIE, loginResponse.getHeaders().get("Set-Cookie"));
         final HttpEntity<Void> request = new HttpEntity<>(requestHeaders);
 
-        final ResponseEntity<UserInfo> response = restTemplate.exchange(AUTH_URL, HttpMethod.GET, request, UserInfo.class);
+        final ResponseEntity<Player> response = restTemplate.exchange(AUTH_URL, HttpMethod.GET, request, Player.class);
 
-        final UserInfo userInfo = response.getBody();
+        final Player player = response.getBody();
 
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
-        assertNotNull(userInfo);
-        assertEquals(LOGIN, userInfo.getLogin());
-        assertEquals(EMAIL, userInfo.getEmail());
+        assertNotNull(player);
+        assertEquals(LOGIN, player.getLogin());
+        assertEquals(EMAIL, player.getEmail());
     }
 
     @Test
     public void testLogoutSuccess() {
         final UserProfile userMock = new UserProfile(LOGIN, passwordEncoder.encode(PASSWORD), EMAIL);
-        when(userService.getUserByLogin(eq(LOGIN))).thenReturn(userMock);
+        when(userService.getUserProfile(eq(LOGIN))).thenReturn(userMock);
 
         final UserProfile login = new UserProfile(LOGIN, PASSWORD, EMAIL);
         final ResponseEntity<Message> loginResponse = restTemplate.postForEntity(AUTH_URL, login, Message.class);
 
-        verify(userService).getUserByLogin(eq(LOGIN));
+        verify(userService).getUserProfile(eq(LOGIN));
         assertEquals(HttpStatus.OK, loginResponse.getStatusCode());
         assertEquals(AUTHORIZED.getMessage(), loginResponse.getBody());
 
