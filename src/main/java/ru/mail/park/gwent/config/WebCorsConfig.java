@@ -20,6 +20,6 @@ public class WebCorsConfig implements WebMvcConfigurer {
 
         registry.addMapping(USERS_URL)
                 .allowedOrigins(ORIGIN, LOCALHOST, GWENT_FRONT, TECH_GWENT)
-                .allowedMethods("GET");
+                .allowedMethods("GET", "POST");
     }
 }
