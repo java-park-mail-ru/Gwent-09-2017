@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  title: TechnoGwent API
+  title: Gwent API
   description: API браузерной мультиплеерной карточной игры ТехноГвинт
-  version: "0.1.2"
+  version: "1.0.0"
   contact:
     email: kgulyy@my.com
   license:
@@ -10,7 +10,7 @@ info:
     url: https://github.com/java-park-mail-ru/Gwent-09-2017/blob/master/LICENSE.md
 schemes:
 - https
-host: 'technogwent-api-012.herokuapp.com'
+host: 'tech-gwent.xyz'
 basePath: /api
 consumes:
 - application/json
