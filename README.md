@@ -15,9 +15,9 @@ Gwent - браузерная мультиплеерная карточная и�
 
 ## Документация API
 
-### Версия 0.2.0
+### Версия 1.0.0
 
-Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/TechnoGwentAPI/0.1.2)
+Описание API приводится на [Swagger](https://app.swaggerhub.com/apis/GwentTeam/GwentAPI/1.0.0)
 
 ## Frontend
 
